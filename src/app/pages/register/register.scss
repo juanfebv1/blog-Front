@@ -1,0 +1,56 @@
+.register-form {
+  border: 1px solid black;
+  width: 50%;
+  align-items: center;
+  margin: 10rem auto;
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    font-family: Arial, Helvetica, sans-serif;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 1rem;
+    }
+
+    input {
+      margin: 0.25rem auto;
+      padding-left: 1rem;
+      height: 3rem;
+      border: 1px solid;
+      border-radius: 0.5rem;
+      font-size: 100%;
+    }
+
+    small {
+      color: red;
+      margin-top: 0.8rem;
+      margin-bottom: 0.5rem;
+      padding-left: 1rem;
+    }
+  }
+
+  .already-account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    * {
+      padding: 0.25rem;
+      margin: 0.25rem 0;
+    }
+
+    a{
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
