@@ -1,0 +1,10 @@
+<nav>
+  @if(!user) {
+    <a routerLink="/register"> Register</a>
+    <a routerLink="/login"> Log in</a>
+  }
+  @else{
+  <p>Hola, {{user.username}}</p>
+  <a (click)="onLogout()"> Log out</a>
+  }
+</nav>

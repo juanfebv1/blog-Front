@@ -12,6 +12,15 @@ export interface User {
 }
 
 export interface CreateUserDTO extends Omit<User, 'id' | 'team'> {}
-export interface UserCreatedDTO extends Omit<CreateUserDTO, 'password'> {}
 
+
+export interface LoginUserDTO {
+  email: string,
+  password: string
+}
+
+export interface UserProfile {
+  email: string,
+  username: string
+}
 

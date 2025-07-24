@@ -5,52 +5,36 @@
       <label for="email">Email: </label>
       <input formControlName="email" id="email" type="email">
 
-      @if (showEmailRequired) {
-        <small class="error"> Email required.</small>
-      }
-      @else if (showEmailError) {
-        <small class="error"> Invalid email.</small>
-      }
-      @else if (emailTaken){
-        <small class="error"> This email already exists.</small>
+      @if (emailError) {
+        <small class="error"> {{ emailError }}</small>
       }
     </div>
     <div class="form-group">
       <label for="username">Username: </label>
       <input formControlName="username" id="username" type="text">
 
-
+    @if (usernameError) {
+      <small class="error"> {{ usernameError }}</small>
+    }
     </div>
 
     <label for="password">Password: </label>
-    <input formControlName="password" id="password" type="text">
-
-    @if (showUsernameError) {
-      <small class="error"> Username required.</small>
-    }
-    @else if (usernameTaken) {
-      <small class="error"> Username already exists.</small>
-    }
-    @else if (showPasswordRequired) {
-      <small class="error">Password required.</small>
-    }
-    @else if( showPasswordError){
-      <small class="error">Password too short.</small>
-    }
+    <input formControlName="password" id="password" type="password">
 
     <label for="confirmPassword">Confirm password: </label>
-    <input formControlName="confirmPassword" id="confirmPassword" type="text">
+    <input formControlName="confirmPassword" id="confirmPassword" type="password">
 
-    @if (showMismatchPasswordError) {
-      <small class="error"> Password mismatch</small>
+    @if (passwordError) {
+      <small class="error"> {{passwordError}} </small>
     }
 
     <button type="submit" > Register</button>
   </form>
   <div class="already-account">
     <p> Have an account?</p>
-    <a>Log in</a>
+    <a routerLink="/login" >Log in</a>
   </div>
+
 </div>
 
 
