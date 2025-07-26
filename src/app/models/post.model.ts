@@ -32,14 +32,11 @@ export interface CommentInterface {
 }
 
 export interface GenericResponse {
-  prevPage: number | null,
-  nextPage: number | null,
-  currentPage: number,
-  pages: number,
-  count: number
+next: string,
+previous: string
 }
 
-export interface ProductResponse extends GenericResponse {
+export interface PostResponse extends GenericResponse {
     results: PostInterface[]
 }
 

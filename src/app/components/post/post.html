@@ -9,6 +9,12 @@
     <p>{{ post.content}}</p>
     <a (click)="displayLikes()"> # Likes: {{post.count_likes}}</a>
     <a> # Comments: {{post.count_comments}}</a>
+    @if (likeFromCurrentUser) {
+      <p>Quitar like</p>
+    }
+    @else {
+      <a (click)="onLikePost()">Dar like</a>
+    }
   </div>
   @if(showLikes){
   <div class="like-list" >

@@ -5,13 +5,15 @@
   <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="form-input">
       <input type="email" id="email" placeholder="Enter email" formControlName="email">
+      <small>{{ emailError}}</small>
     </div>
     <div class="form-input">
       <input type="password" id="password" placeholder="Enter password" formControlName="password">
-      @if (invalidCredentialsError) {
-        <small>{{ invalidCredentialsError }}</small>
-      }
+      <small> {{passwordError}}</small>
     </div>
+    @if (invalidCredentialsError) {
+      <small>{{ invalidCredentialsError }}</small>
+    }
 
     <div>
       <button type="submit">Log in</button>

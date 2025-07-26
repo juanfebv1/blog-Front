@@ -1,59 +1,76 @@
 import { PostService } from './../../services/blog/post-service';
-import { Component, inject, signal } from '@angular/core';
-import { PostInterface } from '../../models/post.model';
+import { Component, effect, inject, signal } from '@angular/core';
+import { PostInterface, PostResponse } from '../../models/post.model';
 import { Post } from '../../components/post/post';
-import { CommonModule } from '@angular/common';
+import { Auth } from '../../services/auth';
+
 
 @Component({
   selector: 'app-post-list',
-  imports: [Post, CommonModule],
+  imports: [Post],
   templateUrl: './post-list.html',
   styleUrl: './post-list.scss'
 })
 export class PostList {
   private postService = inject(PostService);
+  private authService = inject(Auth);
 
   posts = signal<PostInterface[]>([]);
-  currentPage = 0
-  pages = 0;
-  countPosts = 0;
+  prevCursor: string |  null = null;
+  nextCursor: string |  null = null;
 
-  ngOnInit() {
-    this.getPostList();
+  constructor() {
+    effect(() => {
+      const spyAuth = this.authService.isLoggedInSig();
+      this.getPostList();
+    })
   }
 
   getPostList() {
     this.postService.getPosts()
     .subscribe({
-      next: (response) => {
-        this.countPosts = response.count;
-        this.currentPage = 1;
-        this.pages = response.pages;
-        this.posts.set(response.results);
-      },
+      next: (response) => this.handlePostResponse(response),
       error: (rta) => {
-        console.log(rta)
+        console.log("Error getting the posts: ", rta)
       }
     })
   }
 
   prevPagePosts() {
-    this.postService.getPosts(this.currentPage - 1).subscribe({
+    this.postService.getPosts(this.prevCursor).subscribe({
       next: (response) => {
-        this.currentPage--;
-        this.posts.set(response.results);
+        if(response.results.length < 10) this.getPostList();
+        else this.handlePostResponse(response);
+      },
+      error: (rta) => {
+        console.log("Error getting the posts: ", rta);
       }
     });
   }
 
   nextPagePosts() {
-    this.postService.getPosts(this.currentPage + 1).subscribe({
-      next: (response) => {
-        this.currentPage++;
-        this.posts.set(response.results);
+    this.postService.getPosts(this.nextCursor).subscribe({
+      next: (response) => this.handlePostResponse(response),
+      error: (rta) => {
+        console.log("Error getting the posts: ",rta);
       }
     });
   }
 
+  handlePostResponse(response: PostResponse) {
+    console.log(response);
+    if(response.previous){
+      const urlPrev = new URL(response.previous) ;
+      this.prevCursor = urlPrev.searchParams.get('cursor');
+    }
+    else this.prevCursor = null;
+    if(response.next){
+      const urlNext = new URL(response.next);
+      this.nextCursor = urlNext.searchParams.get('cursor');
+    }
+    else this.nextCursor = null;
+
+    this.posts.set(response.results);
+  }
 
 }

@@ -4,6 +4,7 @@ import { PostInterface } from '../../models/post.model';
 import { PostService } from '../../services/blog/post-service';
 import { DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
+import { LikeService } from '../../services/blog/like-service';
 
 @Component({
   selector: 'app-post',
@@ -14,12 +15,25 @@ import { Auth } from '../../services/auth';
 export class Post {
 
   private postService = inject(PostService);
+  private likeService = inject(LikeService);
   private authService = inject(Auth);
 
   userLoggedIn = false;
   constructor() {
     effect(() => {
       this.userLoggedIn = this.authService.isLoggedInSig();
+      this.likeService.getLikes(this.post.id)
+      .subscribe({
+        next: (result) => this.likes = result.results
+      })
+      if (this.userLoggedIn){
+        this.likeService.checkLikeFromUser(this.post.id)
+        .subscribe({
+          next: (response) => {
+            this.likeFromCurrentUser = response.liked
+          }
+        })
+      }
     })
   }
 
@@ -30,7 +44,12 @@ export class Post {
   likeFromCurrentUser = false;
 
   onLikePost() {
-
+    this.likeService.likePost(this.post.id)
+    .subscribe({
+      next: (response) => {
+        this.likeFromCurrentUser = true
+      }
+    })
   }
 
 
