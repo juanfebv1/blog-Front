@@ -8,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
 
 const REDIRECT_DELAY = 1500;
+const ERROR_DELAY = 3000
 
 @Component({
   selector: 'app-register',
@@ -22,12 +23,12 @@ export class Register {
   private router = inject(Router)
   private snackBar = inject(MatSnackBar);
 
-  emailTaken = false;
-  usernameTaken = false;
-
   emailError = '';
   usernameError = '';
   passwordError = '';
+  confirmPasswordError = '';
+
+  isSubmitting = false;
 
   constructor() {
     this.resetTouchedAfterSubmit();
@@ -35,26 +36,6 @@ export class Register {
       if (this.authService.isLoggedInSig()) this.router.navigateByUrl('')
     })
   }
-
-resetTouchedAfterSubmit() {
-  this.registerForm.get('email')?.valueChanges.subscribe(() => {
-    this.emailError = '';
-    this.emailTaken = false;
-  });
-
-  this.registerForm.get('username')?.valueChanges.subscribe(() => {
-    this.usernameError = '';
-    this.usernameTaken = false;
-  });
-
-  this.registerForm.get('password')?.valueChanges.subscribe(() => {
-    this.passwordError = '';
-  });
-
-  this.registerForm.get('confirmPassword')?.valueChanges.subscribe(() => {
-    this.passwordError = '';
-  });
-}
 
   registerForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -72,13 +53,32 @@ resetTouchedAfterSubmit() {
     return password === confirmPassword ? null : {passwordMismatch: true}
   }
 
+  resetTouchedAfterSubmit() {
+    this.registerForm.get('email')?.valueChanges.subscribe(() => {
+      this.emailError = '';
+    });
+
+    this.registerForm.get('username')?.valueChanges.subscribe(() => {
+      this.usernameError = '';
+    });
+
+    this.registerForm.get('password')?.valueChanges.subscribe(() => {
+      this.passwordError = '';
+      this.confirmPasswordError = '';
+    });
+
+    this.registerForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+      this.confirmPasswordError = '';
+    });
+  }
 
   register() {
     if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
       this.handleValidationErrorMessage();
       return;
     }
+
+    this.isSubmitting = true;
 
     const form = this.registerForm.value;
     const dataUser: CreateUserDTO = {
@@ -96,7 +96,10 @@ resetTouchedAfterSubmit() {
         });
         setTimeout(() => this.router.navigateByUrl('/login'), REDIRECT_DELAY)
       },
-      error: (response) => this.handleErrorRegister(response)
+      error: (response) => {
+        this.handleErrorRegister(response);
+        this.isSubmitting = false;
+      }
     })
   }
 
@@ -106,47 +109,47 @@ resetTouchedAfterSubmit() {
     const passwordControl = this.registerForm.get('password');
     const confirmPasswordControl = this.registerForm.get('confirmPassword');
 
-    if (emailControl?.invalid && emailControl.touched) {
-      this.emailError = emailControl.hasError('required') ? 'Email required' : 'Incorrect email';
+    if (emailControl?.invalid) {
+      this.emailError = emailControl.hasError('required') ? 'Email required' : 'Invalid email';
     }
 
-    if (usernameControl?.invalid && usernameControl.touched) {
-      this.usernameError = 'Username is required';
+    if (usernameControl?.invalid) {
+      this.usernameError = 'Username required';
     }
 
-    if (passwordControl?.invalid && passwordControl.touched) {
-      this.passwordError = 'Password is required';
+    if (passwordControl?.invalid ) {
+      this.passwordError = 'Password required';
     }
 
-    if (confirmPasswordControl?.touched) {
-      if (confirmPasswordControl.hasError('required')) {
-        this.passwordError = 'Password confirmation is required';
-      } else if (this.registerForm.hasError('passwordMismatch')) {
-        this.passwordError = 'Passwords do not match';
-      }
+    if (confirmPasswordControl?.invalid) {
+      this.confirmPasswordError = 'Password confirmation required';
+    } else if (this.registerForm.hasError('passwordMismatch')) {
+      this.confirmPasswordError = 'Passwords do not match';
     }
+
   }
-
 
   handleErrorRegister(response: HttpErrorResponse) : void{
     const msg = response.error;
-    const email = msg['email'];
-    const username = msg['username'];
-    if (email) {
+    const email: string[] = msg['email'];
+    const username: string[] = msg['username'];
+    if(email &&  email.some((str) => /already exists/.test(str.toLocaleLowerCase()))) {
       this.emailError = 'This email already exists'
     }
-    else if (username) {
+    else if (username && username.some((str) => /already exists/.test(str.toLocaleLowerCase()))) {
       this.usernameError = 'This username already exists'
     }
     else {
-      this.snackBar.open('Ops, something happened!', 'Close', {
-        duration: REDIRECT_DELAY,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-      });
+      this.displayGenericErrorBar();
     }
   }
 
-
+  displayGenericErrorBar() {
+    this.snackBar.open('Ops, something happened!', 'Close', {
+      duration: ERROR_DELAY,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
+  }
 
 }

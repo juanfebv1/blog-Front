@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +12,18 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.scss'
 })
 export class Login {
+
   private formBuilder = inject(FormBuilder);
   private authService = inject(Auth);
   private router = inject(Router)
 
+  invalidCredentialsError = '';
+  emailError = '';
+  passwordError = '';
+  isSubmitting = false;
+
   constructor() {
+    this.resetTouchedAfterSubmit();
     effect( () => {
       if (this.authService.isLoggedInSig()) this.router.navigateByUrl('')
     })
@@ -23,21 +31,66 @@ export class Login {
 
   loginForm = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  })
+    password: ['', [Validators.required]]
+  });
+
+  resetTouchedAfterSubmit() {
+    this.loginForm.get('email')?.valueChanges.subscribe(() => {
+      this.emailError = '';
+      this.invalidCredentialsError = '';
+    });
+
+    this.loginForm.get('password')?.valueChanges.subscribe(() => {
+      this.passwordError = '';
+      this.invalidCredentialsError = '';
+    });
+  }
 
   login() {
+    if(this.loginForm.invalid) {
+      this.handleValidationErrorMessages();
+      return;
+    }
+
+    this.isSubmitting = true;
+
     const payload = {
       email: this.loginForm.get('email')?.value ?? '',
       password: this.loginForm.get('password')?.value ?? ''
     }
     this.authService.login(payload)
-    .subscribe(
-      (response) => {
-        console.log(response);
-        console.log(this.authService.currentUserSig());
+    .subscribe({
+      next: () => {
         this.router.navigate(['']);
+      },
+      error: (response) => {
+        this.handleErrorLogin(response);
       }
-    )
+    })
+  }
+
+  handleValidationErrorMessages() {
+    const emailControl = this.loginForm.get('email');
+    const passwordControl = this.loginForm.get('password');
+
+    if (emailControl?.invalid) {
+      this.emailError = emailControl.hasError('required') ? 'Email required' : 'Invalid email';
+    }
+
+    if (passwordControl?.invalid ) {
+      this.passwordError = 'Password required';
+    }
+  }
+
+  handleErrorLogin(response: HttpErrorResponse) {
+    this.isSubmitting = false;
+    const msg = response.error;
+    const details = msg['detail'];
+    if (/credentials/.test(details)){
+      this.invalidCredentialsError = 'Invalid credentials';
+    }
+    else {
+      this.invalidCredentialsError = 'Ops, something happened'
+    }
   }
 }

@@ -1,0 +1,23 @@
+<div class="post">
+  <div class="post-header">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.team }}</p>
+    <p> {{ post.username }}</p>
+    <p> {{ post.posted_on | date}}</p>
+  </div>
+  <div class=" post-content">
+    <p>{{ post.content}}</p>
+    <a (click)="displayLikes()"> # Likes: {{post.count_likes}}</a>
+    <a> # Comments: {{post.count_comments}}</a>
+  </div>
+  @if(showLikes){
+  <div class="like-list" >
+    @for (like of likes; track $index) {
+      <div>
+        <p> {{like.email}}</p>
+      </div>
+    }
+  </div>
+  }
+
+</div>

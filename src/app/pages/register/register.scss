@@ -3,6 +3,12 @@
   width: 50%;
   align-items: center;
   margin: 10rem auto;
+
+  .register-title {
+    display: flex;
+    justify-content: center;
+  }
+
   form {
     display: flex;
     flex-direction: column;

@@ -1,0 +1,11 @@
+@for (post of posts(); track $index) {
+  <app-post [post]="post"></app-post>
+}
+
+@if (currentPage > 1) {
+  <button (click)="prevPagePosts()">Prev page</button>
+}
+
+@if (currentPage < pages) {
+  <button (click)="nextPagePosts()">Next page</button>
+}

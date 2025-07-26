@@ -30,7 +30,6 @@ export class Auth {
     return this.http.post<AuthInterface>(`${this.apiUrl}/login/`, dataUser, {context: dontAddToken()})
     .pipe(
       tap((rta) => {
-        console.log(rta);
         this.tokenService.saveToken(rta.access);
         this.tokenService.saveRefreshToken(rta.refresh);
         const user = rta.user;
