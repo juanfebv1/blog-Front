@@ -6,9 +6,30 @@
 }
 
 .post-content {
-  a {
-    padding: 1rem;
-    margin: 1rem;
+  display: flex;
+}
+
+.post-panel {
+  display: flex;
+  * {
+    padding: 0.25rem;
     cursor: pointer;
+
   }
 }
+
+.likes-list-overlay {
+  width: 100px;
+  border: solid 1px #ccc;
+  border-radius: 5px;
+  background: #fff;
+  text-align: center;
+  padding: 10px;
+  margin: 0;
+}
+
+.delete-dialog {
+  border: solid 1px black;
+  background-color: white ;
+}
+

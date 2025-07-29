@@ -16,15 +16,16 @@ export class PostList {
   private authService = inject(Auth);
 
   posts = signal<PostInterface[]>([]);
-  prevCursor: string |  null = null;
-  nextCursor: string |  null = null;
+  prevPage = '';
+  nextPage = '';
 
   constructor() {
     effect(() => {
-      const spyAuth = this.authService.isLoggedInSig();
+      const dummyAuthSubscriptor = this.authService.isLoggedInSig();
       this.getPostList();
     })
   }
+
 
   getPostList() {
     this.postService.getPosts()
@@ -37,7 +38,7 @@ export class PostList {
   }
 
   prevPagePosts() {
-    this.postService.getPosts(this.prevCursor).subscribe({
+    this.postService.getPosts(this.prevPage).subscribe({
       next: (response) => {
         if(response.results.length < 10) this.getPostList();
         else this.handlePostResponse(response);
@@ -49,7 +50,7 @@ export class PostList {
   }
 
   nextPagePosts() {
-    this.postService.getPosts(this.nextCursor).subscribe({
+    this.postService.getPosts(this.nextPage).subscribe({
       next: (response) => this.handlePostResponse(response),
       error: (rta) => {
         console.log("Error getting the posts: ",rta);
@@ -58,18 +59,8 @@ export class PostList {
   }
 
   handlePostResponse(response: PostResponse) {
-    console.log(response);
-    if(response.previous){
-      const urlPrev = new URL(response.previous) ;
-      this.prevCursor = urlPrev.searchParams.get('cursor');
-    }
-    else this.prevCursor = null;
-    if(response.next){
-      const urlNext = new URL(response.next);
-      this.nextCursor = urlNext.searchParams.get('cursor');
-    }
-    else this.nextCursor = null;
-
+    this.prevPage = response.prevPage ? response.prevPage : '';
+    this.nextPage = response.nextPage ? response.nextPage : '';
     this.posts.set(response.results);
   }
 

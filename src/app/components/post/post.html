@@ -5,25 +5,52 @@
     <p> {{ post.username }}</p>
     <p> {{ post.posted_on | date}}</p>
   </div>
-  <div class=" post-content">
-    <p>{{ post.content}}</p>
-    <a (click)="displayLikes()"> # Likes: {{post.count_likes}}</a>
-    <a> # Comments: {{post.count_comments}}</a>
-    @if (likeFromCurrentUser) {
-      <p>Quitar like</p>
+  <div class="post-content">
+    @if(post.content.length < 200){
+      <p>{{ post.content}}</p>
     }
     @else {
-      <a (click)="onLikePost()">Dar like</a>
+      <p> {{ post.content.slice(0,200) + ' ..... '}} <a> Show More</a></p>
     }
   </div>
-  @if(showLikes){
-  <div class="like-list" >
+  <div class="post-panel">
+    <a (click)="showLikes = !showLikes" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{likesCount}} {{likesCount == 1 ? 'Like' : 'Likes'}}</a>
+    <a (click)="goToDetail()"> {{commentCount}} {{commentCount == 1 ? 'Comment' : 'Comments'}}</a>
+    @if (currentUserId) {
+      @if (likeFromCurrentUser === true) {
+        <button (click)="onUnlikePost()">Dislike</button>
+      }
+      @else if (likeFromCurrentUser === false){
+        <button (click)="onLikePost()">Like</button>
+      }
+
+      @if(showEditButtons) {
+        <button>Comment</button>
+        <button>Edit</button>
+        <button (click)="onDelete()">Delete</button>
+      }
+    }
+  </div>
+</div>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="showLikes"
+  (detach)="showLikes = false"
+>
+  <div class="likes-list-overlay">
+    <p>List of likes</p>
+    @if(prevLikesPage) {
+      <button>Prev</button>
+    }
     @for (like of likes; track $index) {
       <div>
         <p> {{like.email}}</p>
       </div>
     }
+    @if (nextLikesPage) {
+      <button>Next</button>
+    }
   </div>
-  }
-
-</div>
+</ng-template>

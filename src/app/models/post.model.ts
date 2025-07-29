@@ -4,7 +4,8 @@ export interface PostInterface {
   content: string,
   username: string,
   email: string,
-  team: string,
+  team: number,
+  team_name: string,
   posted_on: Date,
   authenticated_permission: 0 | 1 | 2,
   team_permission: 0 | 1 | 2,
@@ -31,19 +32,22 @@ export interface CommentInterface {
   content: string
 }
 
-export interface GenericResponse {
-next: string,
-previous: string
+export interface GenericPaginatedResponse {
+  prevPage: string,
+  nextPage: string,
+  currentPage: number,
+  pages: number,
+  count: number
 }
 
-export interface PostResponse extends GenericResponse {
+export interface PostResponse extends GenericPaginatedResponse {
     results: PostInterface[]
 }
 
-export interface LikeResponse extends GenericResponse {
+export interface LikeResponse extends GenericPaginatedResponse {
   results: LikeInterface[]
 }
 
-export interface CommentResponse extends GenericResponse {
+export interface CommentResponse extends GenericPaginatedResponse {
   results: CommentInterface[]
 }

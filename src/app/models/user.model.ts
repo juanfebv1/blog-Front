@@ -1,18 +1,8 @@
-export interface Team {
-  id: string,
-  name: string
-}
-
-export interface User {
-  id: string,
+export interface CreateUserDTO {
   email: string,
   username: string,
-  password: string,
-  team: Team
+  password: string
 }
-
-export interface CreateUserDTO extends Omit<User, 'id' | 'team'> {}
-
 
 export interface LoginUserDTO {
   email: string,
@@ -20,7 +10,10 @@ export interface LoginUserDTO {
 }
 
 export interface UserProfile {
+  id: number,
   email: string,
-  username: string
+  username: string,
+  team: number,
+  team_name: string
 }
 

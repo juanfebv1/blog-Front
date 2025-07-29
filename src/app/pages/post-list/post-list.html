@@ -2,10 +2,10 @@
   <app-post [post]="post"></app-post>
 }
 
-@if (prevCursor) {
+@if (prevPage) {
   <button (click)="prevPagePosts()">Prev page</button>
 }
 
-@if (nextCursor) {
+@if (nextPage) {
   <button (click)="nextPagePosts()">Next page</button>
 }
