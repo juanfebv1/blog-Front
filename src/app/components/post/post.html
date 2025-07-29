@@ -1,31 +1,36 @@
 <div class="post">
   <div class="post-header">
     <h1>{{ post.title }}</h1>
-    <p>{{ post.team }}</p>
+    <p>{{ post.team_name }}</p>
     <p> {{ post.username }}</p>
-    <p> {{ post.posted_on | date}}</p>
+    <p> {{ post.posted_on |  date:'short'}}</p>
   </div>
   <div class="post-content">
     @if(post.content.length < 200){
       <p>{{ post.content}}</p>
     }
     @else {
-      <p> {{ post.content.slice(0,200) + ' ..... '}} <a> Show More</a></p>
+      <p> {{ post.content.slice(0,200) + ' ..... '}} <a [routerLink]="`/posts/${post.id}`"> Show More</a></p>
     }
   </div>
   <div class="post-panel">
     <a (click)="showLikes = !showLikes" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{likesCount}} {{likesCount == 1 ? 'Like' : 'Likes'}}</a>
     <a (click)="goToDetail()"> {{commentCount}} {{commentCount == 1 ? 'Comment' : 'Comments'}}</a>
     @if (currentUserId) {
+
       @if (likeFromCurrentUser === true) {
-        <button (click)="onUnlikePost()">Dislike</button>
+        <div class="like-button" (click)="onUnlikePost()">
+          <img src="like-full.svg" alt="liked">
+        </div>
       }
       @else if (likeFromCurrentUser === false){
-        <button (click)="onLikePost()">Like</button>
+        <div class="like-button" (click)="onLikePost()">
+          <img src="like-empty.svg" alt="like">
+        </div>
       }
 
       @if(showEditButtons) {
-        <button>Comment</button>
+        <button [routerLink]="`posts/${post.id}`">Comment</button>
         <button>Edit</button>
         <button (click)="onDelete()">Delete</button>
       }

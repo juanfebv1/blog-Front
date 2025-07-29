@@ -3,16 +3,15 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@
 import { Auth } from '../../services/auth';
 import { CreateUserDTO } from '../../models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { MatSnackBar} from '@angular/material/snack-bar';
+import { Notification } from '../../services/notification';
 
 const REDIRECT_DELAY = 1500;
-const ERROR_DELAY = 3000
+const ERROR_DELAY = 3000;
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })
@@ -21,7 +20,7 @@ export class Register {
   private formBuilder = inject(FormBuilder);
   private authService = inject(Auth);
   private router = inject(Router)
-  private snackBar = inject(MatSnackBar);
+  private notify = inject(Notification);
 
   emailError = '';
   usernameError = '';
@@ -89,11 +88,8 @@ export class Register {
     this.authService.register(dataUser)
     .subscribe({
       next: () => {
-        this.snackBar.open('Registration successful!', 'Close', {
-          duration: REDIRECT_DELAY,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-        });
+
+        this.notify.displayNotification('Registration successful!', REDIRECT_DELAY)
         setTimeout(() => this.router.navigateByUrl('/login'), REDIRECT_DELAY)
       },
       error: (response) => {
@@ -140,16 +136,7 @@ export class Register {
       this.usernameError = 'This username already exists'
     }
     else {
-      this.displayGenericErrorBar();
+      this.notify.displayNotification('Ops, something happened. Try again, please.', ERROR_DELAY)
     }
   }
-
-  displayGenericErrorBar() {
-    this.snackBar.open('Ops, something happened!', 'Close', {
-      duration: ERROR_DELAY,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-    });
-  }
-
 }

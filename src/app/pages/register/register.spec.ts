@@ -7,13 +7,13 @@ import { Router, RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
+import { Notification } from '../../services/notification';
 
 @Component({template: ''})
 class DummyLoginComponent {}
 
-fdescribe('Register', () => {
+describe('Register', () => {
   let component: Register;
   let fixture: ComponentFixture<Register>;
   let authSpy: jasmine.SpyObj<Auth>;
@@ -157,12 +157,14 @@ fdescribe('Register', () => {
       expect(form.valid).toBeTrue();
 
       const mockResponse: UserProfile = {
+        id: 1,
         email: "correctemail@email.com",
-        username: "test"
+        username: "test",
+        team: 1,
+        team_name: "default"
       }
       authSpy.register.and.returnValue(of(mockResponse));
-
-      const snackBarSpy = spyOn(TestBed.inject(MatSnackBar), 'open');
+      const notificationSpy = spyOn(TestBed.inject(Notification), 'displayNotification')
       const routerSpy = spyOn(TestBed.inject(Router), 'navigateByUrl');
 
       component.register();
@@ -176,13 +178,12 @@ fdescribe('Register', () => {
       expect(component.isSubmitting).toBeTrue();
       expect(authSpy.register).toHaveBeenCalledWith(expectedRequestData);
 
-      expect(snackBarSpy).toHaveBeenCalledOnceWith(
-        'Registration successful!',
-        'Close',
-        jasmine.any(Object)
-      );
 
       tick(1500);
+      expect(notificationSpy).toHaveBeenCalledOnceWith(
+        'Registration successful!',
+        1500
+      );
       expect(routerSpy).toHaveBeenCalledWith('/login');
     }));
 
@@ -232,18 +233,16 @@ fdescribe('Register', () => {
         error: errorResponse
         }))
       );
-
-      const snackBarSpy = spyOn(TestBed.inject(MatSnackBar), 'open');
+      const notificationSpy = spyOn(TestBed.inject(Notification), 'displayNotification')
 
       component.register();
       expect(component.emailError).toBe('');
       expect(component.usernameError).toBe('');
       expect(component.passwordError).toBe('');
       expect(component.confirmPasswordError).toBe('');
-      expect(snackBarSpy).toHaveBeenCalledOnceWith(
-        'Ops, something happened!',
-        'Close',
-        jasmine.any(Object)
+      expect(notificationSpy).toHaveBeenCalledOnceWith(
+        'Ops, something happened. Try again, please.',
+        3000
       );
     })
 

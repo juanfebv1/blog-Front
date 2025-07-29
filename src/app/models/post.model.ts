@@ -1,4 +1,4 @@
-export interface PostInterface {
+export interface PostInterfaceResponse {
   id: number,
   title: string,
   content: string,
@@ -12,6 +12,10 @@ export interface PostInterface {
   public_permission: boolean,
   count_likes: number,
   count_comments: number
+}
+
+export interface PostInterface extends PostInterfaceResponse {
+  hasLiked: boolean
 }
 
 export interface LikeInterface {
@@ -41,7 +45,7 @@ export interface GenericPaginatedResponse {
 }
 
 export interface PostResponse extends GenericPaginatedResponse {
-    results: PostInterface[]
+    results: PostInterfaceResponse[]
 }
 
 export interface LikeResponse extends GenericPaginatedResponse {

@@ -23,11 +23,13 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   const tokenService = inject(Token);
   const http = inject(HttpClient);
   const token = tokenService.getToken();
-  if (!token) return next(request);
-  
+  if (!token) {
+    return next(request);
+  }
+
+
   const isValidToken = tokenService.isValidtoken();
   if (!isValidToken) {
-    console.log('Token se invalidó.');
     return updateAccessAndRefreshToken(request, next, tokenService, http);
   }
 
@@ -72,7 +74,8 @@ function updateAccessAndRefreshToken(
         return addToken(request, next, tokenService);
       }),
       catchError((error) => {
-        console.warn('Refresh token failed', error)
+        console.warn('Refresh token failed', error);
+        localStorage.removeItem('user');
         tokenService.removeToken();
         tokenService.removeRefreshToken();
         return next(request);

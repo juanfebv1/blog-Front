@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CreateUserDTO, LoginUserDTO, UserProfile } from '../models/user.model';
 import { Token } from './token';
@@ -12,13 +12,14 @@ import { dontAddToken } from '../interceptors/auth-interceptor';
 })
 export class Auth {
 
+  private http = inject(HttpClient);
   private tokenService = inject(Token);
   private apiUrl = environment.apiUrl;
 
   currentUserSig = signal<UserProfile | undefined | null>(undefined);
   isLoggedInSig = signal<boolean>(false);
 
-  constructor(private http: HttpClient) {
+  init() {
     this.loadUser();
   }
 
@@ -59,13 +60,17 @@ export class Auth {
   loadUser() {
     if (!this.tokenService.isValidtoken()) {
       this.refreshToken()
-      .subscribe( (response) => {
+      .subscribe(
+        (response) => {
         if(!response) return;
 
         const token = response.access;
         this.tokenService.saveToken(token);
         const UserData = localStorage.getItem('user');
-        if (!UserData) return;
+        if (!UserData) {
+          this.logout();
+          return;
+        }
 
         const user: UserProfile = JSON.parse(UserData);
         this.currentUserSig.set(user);
@@ -74,7 +79,10 @@ export class Auth {
     }
     else {
       const UserData = localStorage.getItem('user');
-      if (!UserData) return;
+      if (!UserData) {
+        this.logout();
+        return;
+      }
 
       const user: UserProfile = JSON.parse(UserData);
       this.currentUserSig.set(user);

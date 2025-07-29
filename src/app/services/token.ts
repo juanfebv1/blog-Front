@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Token {
-
-  private http = inject(HttpClient);
 
   saveToken(token: string) {
     localStorage.setItem('token', token);

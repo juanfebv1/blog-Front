@@ -1,5 +1,5 @@
 import { LikeInterface } from './../../models/post.model';
-import { Component, effect, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, effect, inject, Input, Output } from '@angular/core';
 import { PostInterface } from '../../models/post.model';
 import { DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
@@ -7,12 +7,11 @@ import { LikeService } from '../../services/blog/like-service';
 import { OverlayModule } from '@angular/cdk/overlay'
 import { Dialog, DIALOG_DATA, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { PostService } from '../../services/blog/post-service';
-import { Router } from '@angular/router';
-import { of, switchMap, tap } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post',
-  imports: [DatePipe, OverlayModule, DialogModule],
+  imports: [DatePipe, OverlayModule, DialogModule, RouterLink],
   templateUrl: './post.html',
   styleUrl: './post.scss'
 })
@@ -43,14 +42,7 @@ export class Post {
       this.commentCount = this.post.count_comments;
       this.getLikes();
       this.showEditButtons = this.userCanEdit();
-      if(this.currentUserId){
-        this.likeService.hasUserLikedPost(this.currentUserId, this.post.id)
-        .subscribe({
-          next: (response) => {
-            this.likeFromCurrentUser = response.results.length > 0
-          }
-        })
-      }
+      this.likeFromCurrentUser = this.post.hasLiked;
     })
   }
 
