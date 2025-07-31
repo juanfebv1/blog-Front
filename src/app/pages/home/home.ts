@@ -11,3 +11,4 @@ import { PostList } from '../post-list/post-list';
 export class Home {
 
 }
+  

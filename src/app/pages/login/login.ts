@@ -4,6 +4,7 @@ import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Notification } from '../../services/notification';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class Login {
 
   private formBuilder = inject(FormBuilder);
   private authService = inject(Auth);
-  private router = inject(Router)
+  private router = inject(Router);
+  private notification = inject(Notification);
 
   invalidCredentialsError = '';
   emailError = '';
@@ -61,7 +63,7 @@ export class Login {
     this.authService.login(payload)
     .subscribe({
       next: () => {
-        this.router.navigate(['']);
+        this.router.navigateByUrl('');
       },
       error: (response) => {
         this.handleErrorLogin(response);
@@ -90,7 +92,7 @@ export class Login {
       this.invalidCredentialsError = 'Invalid credentials';
     }
     else {
-      this.invalidCredentialsError = 'Ops, something happened'
+      this.notification.displayNotification('Ops, something happened', 3000);
     }
   }
 }

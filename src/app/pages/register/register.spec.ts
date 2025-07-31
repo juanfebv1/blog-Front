@@ -16,7 +16,7 @@ class DummyLoginComponent {}
 describe('Register', () => {
   let component: Register;
   let fixture: ComponentFixture<Register>;
-  let authSpy: jasmine.SpyObj<Auth>;
+  let authSpy: jasmine.SpyObj<Auth>;  
   let mockIsLoggedInSig = signal(false);
 
   beforeEach(async () => {
@@ -44,8 +44,6 @@ describe('Register', () => {
     fixture   = TestBed.createComponent(Register);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-
   })
 
   const grp = () => component.registerForm
@@ -69,7 +67,8 @@ describe('Register', () => {
     fixture.detectChanges();
 
     expect(routerSpy).toHaveBeenCalledWith('');
-}));
+    })
+  );
 
 
   it('register submit button should be disabled when submitting', () => {
@@ -244,7 +243,7 @@ describe('Register', () => {
         'Ops, something happened. Try again, please.',
         3000
       );
-    })
+    });
 
   })
 

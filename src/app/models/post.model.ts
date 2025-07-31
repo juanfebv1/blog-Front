@@ -6,7 +6,7 @@ export interface PostInterfaceResponse {
   email: string,
   team: number,
   team_name: string,
-  posted_on: Date,
+  posted_on: string,
   authenticated_permission: 0 | 1 | 2,
   team_permission: 0 | 1 | 2,
   public_permission: boolean,
@@ -33,12 +33,13 @@ export interface CommentInterface {
   user: number,
   username: string,
   email: string
-  content: string
+  content: string,
+  commented_at: Date,
 }
 
 export interface GenericPaginatedResponse {
-  prevPage: string,
-  nextPage: string,
+  prevPage: string | null,
+  nextPage: string | null,
   currentPage: number,
   pages: number,
   count: number

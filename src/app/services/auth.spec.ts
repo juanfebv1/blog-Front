@@ -11,7 +11,7 @@ import { ADD_TOKEN } from '../interceptors/auth-interceptor';
 import { Notification } from './notification';
 import { Token } from './token';
 
-fdescribe('Auth', () => {
+describe('Auth', () => {
   let service: Auth;
   let tokenSpy: jasmine.SpyObj<Token>;
   let httpController: HttpTestingController;
@@ -33,7 +33,7 @@ fdescribe('Auth', () => {
         Auth,
         provideHttpClient(),
         provideHttpClientTesting(),
-        {provide: Token, useValue: tokenSpy}
+        {provide: Token, useValue: tokenSpy}  
       ]
     });
 
@@ -181,6 +181,20 @@ fdescribe('Auth', () => {
     expect(service.currentUserSig()).toEqual(user);
     expect(service.isLoggedInSig()).toBeTrue();
   });
+
+  it('should not load user when invalid access and refresh tokens', () => {
+    tokenSpy.isValidtoken.and.returnValue(false);
+    tokenSpy.getRefreshToken.and.returnValue('bad.refresh.token');
+    tokenSpy.isValidRefreshToken.and.returnValue(false);
+
+    spyOn(service, 'logout');
+
+    service.loadUser();
+    expect(service.logout).toHaveBeenCalled();
+    expect(service.currentUserSig()).toBe(undefined);
+    expect(service.isLoggedInSig()).toBeFalse();
+    httpController.expectNone(`${environment.apiUrl}/token/refresh/`);
+  })
 
   afterEach(() => {
     httpController.verify();

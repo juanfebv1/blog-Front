@@ -14,7 +14,7 @@
     }
   </div>
   <div class="post-panel">
-    <a (click)="showLikes = !showLikes" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{likesCount}} {{likesCount == 1 ? 'Like' : 'Likes'}}</a>
+    <a (click)="onShowLikes()" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{likesCount}} {{likesCount == 1 ? 'Like' : 'Likes'}}</a>
     <a (click)="goToDetail()"> {{commentCount}} {{commentCount == 1 ? 'Comment' : 'Comments'}}</a>
     @if (currentUserId) {
 
@@ -30,7 +30,7 @@
       }
 
       @if(showEditButtons) {
-        <button [routerLink]="`posts/${post.id}`">Comment</button>
+        <button (click)="goToDetail()">Comment</button>
         <button>Edit</button>
         <button (click)="onDelete()">Delete</button>
       }
@@ -43,6 +43,7 @@
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="showLikes"
   (detach)="showLikes = false"
+  (overlayOutsideClick)="showLikes = false"
 >
   <div class="likes-list-overlay">
     <p>List of likes</p>

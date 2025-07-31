@@ -1,2 +1,35 @@
-<h1>{{post?.title}}</h1>
-<p>{{post?.content}}</p>
+<div class="post-header">
+  <h1>{{ post?.title }}</h1>
+  <p>{{ post?.team_name }}</p>
+  <p> {{ post?.username }}</p>
+  <p> {{ post?.posted_on |  date:'short'}}</p>
+</div>
+<div class="post-content">
+  <p> {{ post?.content }}</p>
+</div>
+<div class="likes-counter">
+  <p>{{ post?.count_likes}}</p>
+</div>
+<div class="comment-container">
+  <h1>Comments</h1>
+  <ul class="comments-list">
+    @for (comment of comments; track $index) {
+      <div class="comment-header">
+        <p>{{comment.user}}</p>
+        <p>{{comment.commented_at | date: 'short'}}</p>
+      </div>
+      <div class="comment-content">
+        {{ comment.content }}
+      </div>
+    }
+  </ul>
+</div>
+<div class="add-comment-container">
+  <h1>Add New Comment</h1>
+  <input type="text" [(ngModel)]="newComment">
+  <button (click)="submitComment()">Submit</button>
+  <button>Cancel</button>
+
+  <p>This post id: {{postId}}</p>
+  <p>New Comment: {{newComment}}</p>
+</div>

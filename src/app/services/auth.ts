@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { effect, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CreateUserDTO, LoginUserDTO, UserProfile } from '../models/user.model';
 import { Token } from './token';
-import { catchError, EMPTY, of, tap } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import { AuthInterface } from '../models/auth.model';
 import { dontAddToken } from '../interceptors/auth-interceptor';
 
@@ -58,33 +58,43 @@ export class Auth {
   }
 
   loadUser() {
+    const tryGetUser = (): UserProfile | null => {
+      const data = localStorage.getItem('user');
+      if (!data) return null;
+
+      try {
+        return JSON.parse(data) as UserProfile;
+      } catch (error) {
+        this.removeUser();
+        return null;
+      }
+    }
+
     if (!this.tokenService.isValidtoken()) {
       this.refreshToken()
       .subscribe(
         (response) => {
         if(!response) return;
 
-        const token = response.access;
-        this.tokenService.saveToken(token);
-        const UserData = localStorage.getItem('user');
-        if (!UserData) {
+        this.tokenService.saveToken(response.access);
+
+        const user = tryGetUser();
+        if (!user) {
           this.logout();
           return;
         }
 
-        const user: UserProfile = JSON.parse(UserData);
         this.currentUserSig.set(user);
         this.isLoggedInSig.set(true);
       })
     }
     else {
-      const UserData = localStorage.getItem('user');
-      if (!UserData) {
+      const user = tryGetUser();
+      if (!user) {
         this.logout();
         return;
       }
 
-      const user: UserProfile = JSON.parse(UserData);
       this.currentUserSig.set(user);
       this.isLoggedInSig.set(true);
     }

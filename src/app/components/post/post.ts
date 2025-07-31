@@ -27,8 +27,8 @@ export class Post {
 
   likes: LikeInterface[] = [];
   likesCount = 0;
-  prevLikesPage = '';
-  nextLikesPage = '';
+  prevLikesPage: string | null = '';
+  nextLikesPage: string | null = '';  
   showLikes = false;
   commentCount = 0;
   currentUserId = this.authService.currentUserSig()?.id;
@@ -40,7 +40,6 @@ export class Post {
       this.currentUserId = this.authService.currentUserSig()?.id
       this.likesCount = this.post.count_likes;
       this.commentCount = this.post.count_comments;
-      this.getLikes();
       this.showEditButtons = this.userCanEdit();
       this.likeFromCurrentUser = this.post.hasLiked;
     })
@@ -104,11 +103,21 @@ export class Post {
     }
   }
 
+  onShowLikes() {
+    if(!this.showLikes) {
+      this.getLikes();
+      this.showLikes = true;
+    } else {
+      this.showLikes = false;
+    }
+  }
+
   getLikes() {
     this.likeService.getLikes(this.post.id)
     .subscribe({
       next: (response) => {
         this.likes = response.results;
+        this.likesCount = response.count;
         this.prevLikesPage = response.prevPage;
         this.nextLikesPage = response.nextPage;
       }
@@ -138,7 +147,7 @@ export class Post {
   }
 
   goToDetail() {
-    this.router.navigateByUrl(`/posts/${this.post.id}`);
+    this.router.navigate([`/posts/${this.post.id}`]);
   }
 }
 

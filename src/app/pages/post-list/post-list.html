@@ -5,7 +5,7 @@
 @if (prevPage) {
   <button (click)="prevPagePosts()">Prev page</button>
 }
-<p>{{(currentPage- 1) * 10 + 1}} - {{min(currentPage * 10, countPosts)}} of {{ countPosts}}</p>
+<p>{{startPost()}} - {{endPost()}} of {{countPosts()}}</p>
 
 @if (nextPage) {
   <button (click)="nextPagePosts()">Next page</button>

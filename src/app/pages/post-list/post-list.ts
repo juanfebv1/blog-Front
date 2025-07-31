@@ -1,10 +1,11 @@
 import { PostService } from './../../services/blog/post-service';
-import { Component, effect, inject, signal } from '@angular/core';
-import { PostInterface, PostInterfaceResponse, PostResponse } from '../../models/post.model';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { LikeResponse, PostInterface, PostInterfaceResponse, PostResponse } from '../../models/post.model';
 import { Post } from '../../components/post/post';
 import { Auth } from '../../services/auth';
 import { LikeService } from '../../services/blog/like-service';
-import { catchError, map, of, zip } from 'rxjs';
+import { catchError, count, map, of, zip } from 'rxjs';
+import { Notification } from '../../services/notification';
 
 
 @Component({
@@ -17,12 +18,16 @@ export class PostList {
   private postService = inject(PostService);
   private likeService = inject(LikeService);
   private authService = inject(Auth);
+  private notification = inject(Notification);
 
   posts = signal<PostInterface[]>([]);
-  prevPage = '';
-  nextPage = '';
-  countPosts = 0;
-  currentPage = 0;
+  prevPage: string | null = null;
+  nextPage: string | null = null;
+  countPosts = signal(0);
+  currentPage = signal(0);
+
+  startPost = computed(() => Math.max(0, (this.currentPage() - 1) * 10 + 1));
+  endPost = computed(() => Math.min(this.countPosts(), this.currentPage() * 10));
 
 
   constructor() {
@@ -32,18 +37,13 @@ export class PostList {
     })
   }
 
-
   getPostList() {
     this.postService.getPosts()
     .subscribe({
       next: (response) => this.handlePostResponse(response),
-      error: (rta) => {
-        console.log("Error getting the posts: ", rta)
-      }
+      error: (rta) => this.handleErrorResponse()
     })
   }
-
-
 
   prevPagePosts() {
     this.postService.getPosts(this.prevPage).subscribe({
@@ -51,26 +51,22 @@ export class PostList {
         if(response.results.length < 10) this.getPostList();
         else this.handlePostResponse(response);
       },
-      error: (rta) => {
-        console.log("Error getting the posts: ", rta);
-      }
+      error: (rta) => this.handleErrorResponse()
     });
   }
 
   nextPagePosts() {
     this.postService.getPosts(this.nextPage).subscribe({
       next: (response) => this.handlePostResponse(response),
-      error: (rta) => {
-        console.log("Error getting the posts: ",rta);
-      }
+      error: (rta) => this.handleErrorResponse()
     });
   }
 
   handlePostResponse(response: PostResponse) {
-    this.prevPage = response.prevPage ?? '';
-    this.nextPage = response.nextPage ?? '';
-    this.countPosts = response.count;
-    this.currentPage = response.currentPage
+    this.prevPage = response.prevPage;
+    this.nextPage = response.nextPage;
+    this.countPosts.set(response.count);
+    this.currentPage.set(response.currentPage);
 
     const posts = response.results;
     const user = this.authService.currentUserSig()?.id;
@@ -82,10 +78,7 @@ export class PostList {
 
     const postswithHasLikedPromise = posts.map(post =>
       this.likeService.hasUserLikedPost(user, post.id).pipe(
-        map(response => ({
-          ...post,
-          hasLiked: response.results.length > 0
-        })),
+        map(response => this.attachLike(post,response)),
         catchError(() => of({...post, hasLiked: false}))
       )
     );
@@ -93,10 +86,14 @@ export class PostList {
     zip(...postswithHasLikedPromise).subscribe((postsWithHasLiked: PostInterface[]) => {
       this.posts.set(postsWithHasLiked);
     });
-
   }
 
-  min(x:number, y:number) {
-    return Math.min(x,y)
+  attachLike(post: PostInterfaceResponse, response: LikeResponse): PostInterface {
+    return {...post, hasLiked: response.results.length > 0};
   }
+
+  handleErrorResponse() {
+    this.notification.displayNotification('Error fetching the posts', 3000);
+  }
+
 }
