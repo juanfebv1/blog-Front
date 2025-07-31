@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'  
 })
 export class LikeService {
   private apiUrl = environment.apiUrl;

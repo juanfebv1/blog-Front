@@ -1,16 +1,17 @@
 import { PostService } from './../../services/blog/post-service';
-import { Component, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { concatMap, of, switchMap, tap, toArray } from 'rxjs';
+import { catchError, concatMap, of, switchMap, tap, toArray, throwError } from 'rxjs';
 import { CommentInterface, PostInterface } from '../../models/post.model';
 import { DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { CommentService } from '../../services/blog/comment-service';
 import { FormsModule } from '@angular/forms';
+import { Nav } from '../../shared/nav/nav';
 
 @Component({
   selector: 'app-post-detail',
-  imports: [DatePipe, FormsModule],
+  imports: [DatePipe, FormsModule, Nav],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.scss'
 })
@@ -29,10 +30,20 @@ export class PostDetail {
   comments: CommentInterface[] | null = [];
   prevPageComments: string | null = null;
   nextPageComments: string | null = null;
-  currentPageComments: number = 0;
-  commentCount = 0;
+  currentPageComments = signal(0);
+  commentCount = signal(0);
 
+  startComment = computed(() => Math.max(0, (this.currentPageComments() - 1)* 5 + 1));
+  endComment = computed(() => Math.min(this.commentCount(), this.currentPageComments() * 5));
+
+  userCanComment = false;
   newComment: string = '';
+
+  constructor() {
+    effect(() => {
+      this.userCanComment = this.authService.isLoggedInSig();
+    })
+  }
 
   ngOnInit() {
     this.status = 'loading';
@@ -45,31 +56,60 @@ export class PostDetail {
         }
         return of(null);
       }),
+      catchError(() => {
+        this.router.navigateByUrl('not-found');
+        return of(null);
+      }),
       switchMap((post) => {
         if (!post) return of(null);
-        this.post = post
-        return this.commentService.getComments(this.postId);
+        this.post = post;
+        return this.getComments()
       })
     )
     .subscribe({
-      next: (response) => {
-        if (!response) {
-          this.router.navigateByUrl('not-found');
-        } else {
-        this.comments = response.results;
-        this.status = 'ready';
-        }
-      },
+      next: () => this.status = 'ready',
       error: (error) => {
         console.error(error);
-        this.router.navigateByUrl('not-found');
       }
     })
   }
 
+  getComments(page: string | null = null) {
+    return this.commentService.getComments(this.postId, page).pipe(
+      tap((response) => {
+        this.comments = response.results;
+        this.prevPageComments = response.prevPage;
+        this.nextPageComments = response.nextPage;
+        this.currentPageComments.set(response.currentPage);
+        this.commentCount.set(response.count);
+      }),
+      catchError((error) => {
+        console.error(error);
+        return of(null);
+      })
+    )
+  }
+
+  onPrevPageComments() {
+    this.getComments(this.prevPageComments).subscribe()
+  }
+
+  onNextPageComments() {
+    this.getComments(this.nextPageComments).subscribe()
+  }
+
   submitComment() {
     this.commentService.commentPost(this.postId,this.newComment)
-    .subscribe((comment) => this.comments?.concat(comment))
+    .subscribe((comment) => {
+      if (this.comments && this.comments.length < 5) {
+        this.comments?.push(comment);
+      } else {
+        this.status = 'loading';
+        this.getComments().subscribe(() => this.status = 'ready')
+      }
+      this.newComment = '';
+    }
+  )
   }
 
 }

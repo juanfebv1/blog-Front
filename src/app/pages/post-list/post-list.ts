@@ -47,10 +47,7 @@ export class PostList {
 
   prevPagePosts() {
     this.postService.getPosts(this.prevPage).subscribe({
-      next: (response) => {
-        if(response.results.length < 10) this.getPostList();
-        else this.handlePostResponse(response);
-      },
+      next: (response) => this.handlePostResponse(response),
       error: (rta) => this.handleErrorResponse()
     });
   }

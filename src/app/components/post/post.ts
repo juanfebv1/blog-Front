@@ -1,7 +1,7 @@
 import { LikeInterface } from './../../models/post.model';
 import { Component, effect, inject, Input, Output } from '@angular/core';
 import { PostInterface } from '../../models/post.model';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { LikeService } from '../../services/blog/like-service';
 import { OverlayModule } from '@angular/cdk/overlay'
@@ -11,7 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post',
-  imports: [DatePipe, OverlayModule, DialogModule, RouterLink],
+  imports: [DatePipe, OverlayModule, DialogModule, RouterLink, CommonModule],
   templateUrl: './post.html',
   styleUrl: './post.scss'
 })
@@ -28,9 +28,8 @@ export class Post {
   likes: LikeInterface[] = [];
   likesCount = 0;
   prevLikesPage: string | null = '';
-  nextLikesPage: string | null = '';  
+  nextLikesPage: string | null = '';
   showLikes = false;
-  commentCount = 0;
   currentUserId = this.authService.currentUserSig()?.id;
   likeFromCurrentUser: boolean | null = null;
   showEditButtons = false;
@@ -39,7 +38,6 @@ export class Post {
     effect(() => {
       this.currentUserId = this.authService.currentUserSig()?.id
       this.likesCount = this.post.count_likes;
-      this.commentCount = this.post.count_comments;
       this.showEditButtons = this.userCanEdit();
       this.likeFromCurrentUser = this.post.hasLiked;
     })
@@ -55,10 +53,8 @@ export class Post {
     if (this.post.authenticated_permission > 1) return true;
 
     if (this.post.team_permission > 1 && Number(this.post.team) === Number(user.team)) {
-      console.log("Solved")
       return true;
     }
-    console.log("Not solved")
     return false;
   }
 

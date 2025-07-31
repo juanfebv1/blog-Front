@@ -1,25 +1,90 @@
-.post-header {
-  display: flex;
-  * {
-    margin: 1rem 1rem;
+.post {
+  padding-bottom: 0.5rem;
+  border-bottom: 2px dashed gray;
+
+  .post-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    h1 {
+      flex: 1 1 35%;
+      min-width: 200px;
+    }
+    .post-info {
+      display: flex;
+      flex: 1 1 60%;
+      justify-content: flex-end;
+      align-items: center;
+      flex-wrap: wrap;
+      min-width: 200px;
+      p {
+        margin: 0 0.5rem;
+      }
+    }
+  }
+
+  .post-content {
+    a {
+      font-size: 1.5rem;
+    }
   }
 }
 
-.post-content {
-  display: flex;
-}
 
 .post-panel {
   display: flex;
-  * {
-    padding: 0.25rem;
-    cursor: pointer;
+  align-items: center;
+  margin-bottom: 1rem;
 
+  .likes-comments-counter {
+    flex: 1 1 50%;
+
+    .comment-counter {
+      margin-left: 0.5rem;
+    }
+
+  }
+
+  .interact-buttons {
+    flex: 1 1 50%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .like-comment-container {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: space-evenly;
+
+      .like-button {
+        padding: 1rem;
+        height: 2rem;
+        cursor: pointer;
+        background-repeat: no-repeat;
+      }
+
+      .like{
+        background-image: url('/like-empty.svg');
+      }
+      .dislike {
+        background-image: url('/like-full.svg');
+      }
+    }
+
+    .edit-buttons {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: space-evenly;
+      margin-right: 3rem;
+      * {
+        margin: 0 1rem;
+      }
+    }
   }
 }
 
 .likes-list-overlay {
-  width: 100px;
   border: solid 1px #ccc;
   border-radius: 5px;
   background: #fff;
@@ -33,7 +98,10 @@
   background-color: white ;
 }
 
-.like-button {
-  width: 2rem;
-  height: 2rem;
+
+
+button, a {
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-right: 0.25rem;
 }

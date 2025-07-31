@@ -20,7 +20,7 @@ class MockPostComponent {
   @Input() post: any;
 }
 
-fdescribe('PostList', () => {
+describe('PostList', () => {
   let component: PostList;
   let fixture: ComponentFixture<PostList>;
   let authSpy: jasmine.SpyObj<Auth>;
@@ -59,9 +59,6 @@ fdescribe('PostList', () => {
 
     likeSpy = jasmine.createSpyObj('LikeService',
       [
-        'likePost',
-        'unlikePost',
-        'deleteLike',
         'hasUserLikedPost'
       ]
     );
@@ -196,7 +193,7 @@ fdescribe('PostList', () => {
     });
   }));
 
-  
+
 
 
 

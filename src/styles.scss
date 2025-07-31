@@ -31,3 +31,37 @@ html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;  // equivalent to Tailwind px-4 (16px)
+  padding-right: 1rem;
+
+  // Responsive max-widths (default Tailwind breakpoints)
+  @media (min-width: 640px) {
+    max-width: 640px; // sm
+  }
+
+  @media (min-width: 768px) {
+    max-width: 768px; // md
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 1024px; // lg
+  }
+
+  @media (min-width: 1280px) {
+    max-width: 1280px; // xl
+  }
+
+  @media (min-width: 1536px) {
+    max-width: 1536px; // 2xl
+  }
+}

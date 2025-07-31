@@ -1,9 +1,9 @@
-import { PostInterfaceResponse } from "./models/post.model";
+import { LikeResponse, PostInterface, PostInterfaceResponse } from "./models/post.model";
 import { UserProfile } from "./models/user.model";
 
 export const mockUser: UserProfile = {
     id: 1,
-    email: "mock@email.com",
+    email: "user@email.com",
     username: "mockUser",
     team: 1,
     team_name: "default"
@@ -161,3 +161,47 @@ export const postsList: PostInterfaceResponse[] = [
       "count_comments": 0
   }
 ]
+
+export const likesList: LikeResponse = {
+  "prevPage": null,
+  "nextPage": null,
+  "currentPage": 1,
+  "pages": 1,
+  "count": 2,
+  "results": [
+      {
+          "id": 211,
+          "post": 127,
+          "user": 4,
+          "username": "juan",
+          "email": "juan@email.com",
+          "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+      },
+      {
+          "id": 224,
+          "post": 127,
+          "user": 19,
+          "username": "breyner",
+          "email": "breyner@email.com",
+          "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+      }
+  ]
+}
+
+export const mockBasePost: PostInterface =
+{
+  id: 1,
+  title: 'string',
+  content: "string",
+  username: "string",
+  email: "other@email.com",
+  team: 1,
+  team_name: "string",
+  posted_on: new Date().toISOString(),
+  authenticated_permission: 1,
+  team_permission: 1,
+  public_permission: true,
+  count_likes: 15,
+  count_comments: 15,
+  hasLiked: true
+}

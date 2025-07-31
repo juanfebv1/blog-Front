@@ -1,35 +1,59 @@
-<div class="post-header">
-  <h1>{{ post?.title }}</h1>
-  <p>{{ post?.team_name }}</p>
-  <p> {{ post?.username }}</p>
-  <p> {{ post?.posted_on |  date:'short'}}</p>
-</div>
-<div class="post-content">
-  <p> {{ post?.content }}</p>
-</div>
-<div class="likes-counter">
-  <p>{{ post?.count_likes}}</p>
-</div>
-<div class="comment-container">
-  <h1>Comments</h1>
-  <ul class="comments-list">
-    @for (comment of comments; track $index) {
-      <div class="comment-header">
-        <p>{{comment.user}}</p>
-        <p>{{comment.commented_at | date: 'short'}}</p>
+<app-nav></app-nav>
+
+<div class="container post-detail-section">
+  @if (status === 'loading') {
+    <div>
+      Loading content...
+    </div>
+  }
+  @else {
+    <div class="post-header">
+      <h1>{{ post?.title }}</h1>
+      <div class="post-info">
+        <p>{{ post?.team_name }}</p>
+        <p> {{ post?.username }}</p>
+        <p> {{ post?.posted_on |  date:'short'}}</p>
       </div>
-      <div class="comment-content">
-        {{ comment.content }}
+    </div>
+    <div class="post-content">
+      <p> {{ post?.content }}</p>
+    </div>
+    <div class="likes-counter">
+      <p>{{ post?.count_likes}} {{post?.count_likes === 1 ? 'Like' : 'Likes'}}</p>
+    </div>
+    <div class="comments-container">
+      <h2>Comments</h2>
+      <ul class="comments-list">
+        @for (comment of comments; track $index) {
+          <div class="comment-header">
+            <p class="username">{{comment.username}}</p>
+            <p class="date">{{comment.commented_at | date: 'short'}}</p>
+          </div>
+          <div class="comment-content">
+            <p>{{ comment.content }}</p>
+          </div>
+        }
+      </ul>
+      <div class="nav-comments">
+        @if (prevPageComments) {
+          <button (click)="onPrevPageComments()">Prev page</button>
+        }
+        <p>{{startComment()}} - {{endComment()}} of {{commentCount()}}</p>
+
+        @if (nextPageComments) {
+          <button (click)="onNextPageComments()" >Next page</button>
+        }
+      </div>
+    </div>
+    @if (userCanComment){
+      <div class="add-comment-container">
+        <h2>Add New Comment</h2>
+        <textarea [(ngModel)]="newComment" rows="3" placeholder="Write your comment..."></textarea>
+        <div class="add-comment-buttons">
+          <button class="submit-but" (click)="submitComment()">Submit</button>
+          <button (click)="newComment=''">Cancel</button>
+        </div>
       </div>
     }
-  </ul>
-</div>
-<div class="add-comment-container">
-  <h1>Add New Comment</h1>
-  <input type="text" [(ngModel)]="newComment">
-  <button (click)="submitComment()">Submit</button>
-  <button>Cancel</button>
-
-  <p>This post id: {{postId}}</p>
-  <p>New Comment: {{newComment}}</p>
+  }
 </div>

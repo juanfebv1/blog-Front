@@ -18,7 +18,7 @@ class DummyRegisterComponent {}
 describe('Login', () => {
   let component: Login;
   let fixture: ComponentFixture<Login>;
-  let authSpy: jasmine.SpyObj<Auth>;
+  let authSpy: jasmine.SpyObj<Auth>;  
   let mockIsLoggedInSig = signal(false);
 
   beforeEach(async () => {

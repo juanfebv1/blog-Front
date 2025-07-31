@@ -1,0 +1,24 @@
+.post-list {
+  margin-top: 1rem;
+}
+
+.posts-nav {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .counter {
+    flex-grow: 1;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+

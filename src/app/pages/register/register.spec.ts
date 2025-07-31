@@ -16,7 +16,7 @@ class DummyLoginComponent {}
 describe('Register', () => {
   let component: Register;
   let fixture: ComponentFixture<Register>;
-  let authSpy: jasmine.SpyObj<Auth>;  
+  let authSpy: jasmine.SpyObj<Auth>;
   let mockIsLoggedInSig = signal(false);
 
   beforeEach(async () => {
@@ -197,7 +197,7 @@ describe('Register', () => {
         throwError( () => ({
         error: errorResponse
         }))
-      );
+      );  
       component.register();
       expect(component.emailError).toBe('This email already exists')
       expect(component.isSubmitting).toBe(false);

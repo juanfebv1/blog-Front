@@ -1,3 +1,94 @@
-.post-content {
-  border: 1px solid black;
+.post-detail-section {
+  .post-header {
+    display: flex;
+    flex-wrap: wrap;
+    h1 {
+      flex: 1 1 50%;
+    }
+    .post-info {
+      flex: 1 1 50%;
+      display: flex;
+      justify-content: space-between;
+
+      * {
+        padding: 0 0.5rem;
+      }
+    }
+  }
+
+  .post-content {
+    border: 3px solid black;
+
+    p {
+      padding: 0 0.5rem;
+    }
+  }
+
+  .likes-counter {
+    display: flex;
+    justify-content: center;
+  }
+
+  .comments-container {
+    margin-top: 1rem;
+    h2 {
+      text-align: center;
+    }
+
+    .comments-list {
+      padding-left: 0;
+      .comment-header{
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .comment-content {
+        border: 2px solid black;
+
+        p {
+          padding: 0 0.5rem;
+        }
+      }
+    }
+  }
+
+  .add-comment-container {
+    margin: 3rem auto;
+    display: flex;
+    flex-direction: column;
+
+    textarea {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .add-comment-buttons {
+      display: flex;
+      justify-content: end;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+
+      * {
+        cursor: pointer;
+        background-color: white;
+        font-size: 1rem;
+        padding: 0.25rem 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); // subtle shadow
+        transition: box-shadow 0.3s ease;
+
+        &:hover {
+         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); // stronger on hover
+        }
+      }
+      .submit-but {
+        margin-right: 1rem;
+      }
+    }
+  }
 }
+

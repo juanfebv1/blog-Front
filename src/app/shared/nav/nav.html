@@ -1,11 +1,17 @@
-<nav>
-  <p>Avanzatech Blog</p>
-  @if(!user) {
-    <a routerLink="/register"> Register</a>
-    <a routerLink="/login"> Log in</a>
-  }
-  @else{
-    <p>Welcome, {{user.username}}</p>
-    <a (click)="onLogout()"> Log out</a>
-  }
+<nav class="container">
+  <div class="logo">
+    <p>Avanzatech Blog</p>
+  </div>
+  <div [style.visibility]="user ? 'visible' : 'hidden'" class="welcome">
+    <h2>Welcome, {{user && user.username.length < 15 ? user.username : user?.username?.slice(0,14) + '...'}}</h2>
+  </div>
+  <div class="log-buttons">
+    @if(!user) {
+      <a routerLink="/register"> Register</a>
+      <a routerLink="/login"> Log in</a>
+    }
+    @else{
+      <a (click)="onLogout()"> Log out</a>
+    }
+  </div>
 </nav>

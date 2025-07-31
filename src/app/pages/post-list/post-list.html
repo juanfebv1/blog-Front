@@ -1,12 +1,28 @@
-@for (post of posts(); track $index) {
-  <app-post [post]="post"></app-post>
-}
+<div class="container">
+  <div class="post-list">
+    @for (post of posts(); track $index) {
+      <app-post [post]="post"></app-post>
+    }
+  </div>
+  <div class="posts-nav">
 
-@if (prevPage) {
-  <button (click)="prevPagePosts()">Prev page</button>
-}
-<p>{{startPost()}} - {{endPost()}} of {{countPosts()}}</p>
+    <button
+      class="prev-page"
+      (click)="prevPagePosts()"
+      [style.visibility]="prevPage? 'visible' : 'hidden'"
+    >
+      Prev page
+    </button>
+    <p class="counter">
+      {{startPost()}} - {{endPost()}} of {{countPosts()}}
+    </p>
+    <button
+      class="next-page"
+      (click)="nextPagePosts()"
+      [style.visibility]="nextPage? 'visible' : 'hidden'"
+    >
+      Next page
+    </button>
+  </div>
+</div>
 
-@if (nextPage) {
-  <button (click)="nextPagePosts()">Next page</button>
-}
