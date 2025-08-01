@@ -1,4 +1,4 @@
-import { LikeResponse, PostInterface, PostInterfaceResponse } from "./models/post.model";
+import { LikeInterface, LikeResponse, PostInterface, PostInterfaceResponse } from "./models/post.model";
 import { UserProfile } from "./models/user.model";
 
 export const mockUser: UserProfile = {
@@ -163,12 +163,12 @@ export const postsList: PostInterfaceResponse[] = [
 ]
 
 export const likesList: LikeResponse = {
-  "prevPage": null,
-  "nextPage": null,
-  "currentPage": 1,
-  "pages": 1,
-  "count": 2,
-  "results": [
+  prevPage: null,
+  nextPage: null,
+  currentPage: 1,
+  pages: 1,
+  count: 3,
+  results: [
       {
           "id": 211,
           "post": 127,
@@ -184,7 +184,144 @@ export const likesList: LikeResponse = {
           "username": "breyner",
           "email": "breyner@email.com",
           "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+      },
+      {
+          "id": 1,
+          "post": 1,
+          "user": 1,
+          "username": "mockUser",
+          "email": "mockUser@email.com",
+          "liked_at": new Date()
       }
+  ]
+}
+
+export const LongLikeList: LikeResponse = {
+  prevPage: null,
+  nextPage: 'nextPage',
+  currentPage: 1,
+  pages: 1,
+  count: 15,
+  results: [
+    {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
+    {
+        "id": 1,
+        "post": 1,
+        "user": 1,
+        "username": "mockUser",
+        "email": "mockUser@email.com",
+        "liked_at": new Date()
+    },
+        {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
+        {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },    {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
+        {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
+        {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
+        {
+        "id": 211,
+        "post": 127,
+        "user": 4,
+        "username": "juan",
+        "email": "juan@email.com",
+        "liked_at": new Date("2025-07-31T19:48:30.726102Z")
+    },
+    {
+        "id": 224,
+        "post": 127,
+        "user": 19,
+        "username": "breyner",
+        "email": "breyner@email.com",
+        "liked_at": new Date("2025-07-31T20:55:53.148527Z")
+    },
   ]
 }
 
@@ -201,7 +338,16 @@ export const mockBasePost: PostInterface =
   authenticated_permission: 1,
   team_permission: 1,
   public_permission: true,
-  count_likes: 15,
-  count_comments: 15,
+  count_likes: 8,
+  count_comments: 14,
   hasLiked: true
+}
+
+export const mockLike: LikeInterface = {
+  id: 1,
+  post: 1,
+  user: 1,
+  username: "mockUser",
+  email: "mockUser@email.com",
+  liked_at: new Date()
 }

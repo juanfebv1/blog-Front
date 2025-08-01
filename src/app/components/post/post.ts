@@ -9,6 +9,8 @@ import { Dialog, DIALOG_DATA, DialogModule, DialogRef } from '@angular/cdk/dialo
 import { PostService } from '../../services/blog/post-service';
 import { Router, RouterLink } from '@angular/router';
 
+const LIKE_PAGE_SIZE = 15;
+
 @Component({
   selector: 'app-post',
   imports: [DatePipe, OverlayModule, DialogModule, RouterLink, CommonModule],
@@ -26,20 +28,16 @@ export class Post {
   @Input() post!: PostInterface;
 
   likes: LikeInterface[] = [];
-  likesCount = 0;
   prevLikesPage: string | null = '';
   nextLikesPage: string | null = '';
   showLikes = false;
-  currentUserId = this.authService.currentUserSig()?.id;
-  likeFromCurrentUser: boolean | null = null;
+  // currentUserId = this.authService.currentUserSig()?.id;
   showEditButtons = false;
 
   constructor() {
     effect(() => {
-      this.currentUserId = this.authService.currentUserSig()?.id
-      this.likesCount = this.post.count_likes;
+      const dummyAuthSubscriptor = this.authService.currentUserSig()?.id
       this.showEditButtons = this.userCanEdit();
-      this.likeFromCurrentUser = this.post.hasLiked;
     })
   }
 
@@ -77,25 +75,29 @@ export class Post {
     this.likeService.likePost(this.post.id)
     .subscribe({
       next: (response) => {
-        this.likeFromCurrentUser = true;
-        this.likes = [...this.likes, response];
-        this.likesCount ++;
-        if (this.likesCount > 10) {
-          this.likes.splice(10)
+        if(this.post.count_likes + 1 > LIKE_PAGE_SIZE){
+          this.getLikes();
+        } else {
+          this.post.count_likes++;
+          this.likes = [...this.likes, response];
         }
+        this.post.hasLiked = true;
       }
     })
   }
 
   onUnlikePost() {
-    if(this.currentUserId){
-      this.likeService.unlikePost(this.currentUserId, this.post.id)
-      .subscribe( () => {
-        this.likeFromCurrentUser = false;
-        this.likes = this.likes.filter((like) => like.user != this.currentUserId);
-        this.likesCount --;
-      }
-    )
+    const user = this.authService.currentUserSig();
+    if(user && user.id){
+      this.likeService.unlikePost(user.id, this.post.id)
+      .subscribe({
+        next: () => {
+          this.post.hasLiked = false;
+          this.likes = this.likes.filter((like) => like.user != user.id);
+          this.post.count_likes--;
+        },
+        error: (error) => console.error(error)
+      })
     }
   }
 
@@ -108,23 +110,12 @@ export class Post {
     }
   }
 
-  getLikes() {
-    this.likeService.getLikes(this.post.id)
+  getLikes(page: string | null = null) {
+    this.likeService.getLikes(this.post.id, page)
     .subscribe({
       next: (response) => {
         this.likes = response.results;
-        this.likesCount = response.count;
-        this.prevLikesPage = response.prevPage;
-        this.nextLikesPage = response.nextPage;
-      }
-    })
-  }
-
-  getNextLikesPage() {
-    this.likeService.getLikes(this.post.id, this.nextLikesPage)
-    .subscribe({
-      next: (response) => {
-        this.likes = response.results;
+        this.post.count_likes = response.count;
         this.prevLikesPage = response.prevPage;
         this.nextLikesPage = response.nextPage;
       }
@@ -132,15 +123,13 @@ export class Post {
   }
 
   getPrevLikesPage() {
-    this.likeService.getLikes(this.post.id, this.prevLikesPage)
-    .subscribe({
-      next: (response) => {
-        this.likes = response.results;
-        this.prevLikesPage = response.prevPage;
-        this.nextLikesPage = response.nextPage;
-      }
-    })
+    this.getLikes(this.prevLikesPage);
   }
+
+  getNextLikesPage() {
+    this.getLikes(this.nextLikesPage);
+  }
+
 
   goToDetail() {
     this.router.navigate([`/posts/${this.post.id}`]);

@@ -1,0 +1,49 @@
+<div class="container creation-form">
+  <form [formGroup]="postForm" (ngSubmit)="submitPost()">
+    <div class="form-title">
+      <p>title</p>
+      <input
+        formControlName="title"
+        id="title"
+        type="text"
+      >
+    </div>
+    <div class="form-content">
+      <p>Content</p>
+      <input
+        type="text"
+        formControlName="content"
+        id="content"
+      >
+    </div>
+    <div class="form-permissions">
+      <div class="public-permission">
+        <p>Public</p>
+        <select formControlName="publicPermission">
+          <option value="">Select a choice</option>
+          @for (option of publicPermissionOptions.keys(); track $index) {
+            <option [value]="option">{{option}}</option>
+          }
+        </select>
+      </div>
+      <div class="authenticated-permission">
+        <p>Authenticated</p>
+        <select formControlName="authenticatedPermission">
+          <option value="">Select a choice</option>
+          @for (option of permissionOptions.keys(); track $index) {
+            <option [value]="option">{{option}}</option>
+          }
+        </select>
+      </div>
+      <div class="team-permission">
+        <p>Team</p>
+        <select formControlName="teamPermission">
+          <option value="">Select a choice</option>
+          @for (option of permissionOptions.keys(); track $index) {
+            <option [value]="option">{{option}}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </form>
+</div>

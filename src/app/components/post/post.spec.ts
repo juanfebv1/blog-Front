@@ -1,13 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { Post } from './post';
 import { Auth } from '../../services/auth';
 import { PostService } from '../../services/blog/post-service';
 import { LikeService } from '../../services/blog/like-service';
 import { signal, WritableSignal } from '@angular/core';
-import { likesList, mockBasePost, mockUser } from '../../mock-data';
-import { of } from 'rxjs';
+import { likesList, LongLikeList, mockBasePost, mockLike, mockUser } from '../../mock-data';
+import { count, of } from 'rxjs';
 import { UserProfile } from '../../models/user.model';
+import { LikeResponse } from '../../models/post.model';
 
 fdescribe('Post user logged in', () => {
   let component: Post;
@@ -39,6 +40,7 @@ fdescribe('Post user logged in', () => {
       ]
      );
      likeSpy.getLikes.and.returnValue(of(likesList));
+     likeSpy.likePost.and.returnValue(of(mockLike));
 
 
     await TestBed.configureTestingModule({
@@ -62,10 +64,9 @@ fdescribe('Post user logged in', () => {
   });
 
   it('should initialize correctly with post and user info', () => {
-    expect(component.currentUserId).toEqual(mockUser.id)
-    expect(component.likesCount).toEqual(mockBasePost.count_likes);
+    expect(component.post.count_likes).toEqual(mockBasePost.count_likes);
     expect(component.showEditButtons).toBeFalse();
-    expect(component.likeFromCurrentUser).toBeTrue();
+    expect(component.post.hasLiked).toBeTrue();
   });
 
   describe('userCanEdit()', () => {
@@ -101,6 +102,7 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, authenticated_permission: 1, team_permission: 2};
       fixture.detectChanges();
       expect(component.showEditButtons).toBeFalse();
+      mockUserSig.set(mockUser);
     });
 
     it('should not allow edit if private post', () => {
@@ -117,11 +119,63 @@ fdescribe('Post user logged in', () => {
         expect(likeSpy.likePost).toHaveBeenCalledOnceWith(component.post.id);
       });
 
-      it('should update like info', () => {
+      it('should update like info when list of likes is less than PAGE_SIZE', () => {
+        fixture = TestBed.createComponent(Post);
+        component = fixture.componentInstance;
+        component.post = {...mockBasePost, hasLiked: false};
+        fixture.detectChanges();
+        component.onLikePost();
+        expect(component.post.hasLiked).toBeTrue();
+        expect(component.post.count_likes).toBe(mockBasePost.count_likes + 1);
+        expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeTrue();
+      });
+
+      it('should correctly update like info when list of likes is greater than PAGE_SIZE', () => {
+        fixture = TestBed.createComponent(Post);
+        component = fixture.componentInstance;
+
+        component.post = {...mockBasePost, hasLiked: false, count_likes: 15};
+        const oldPost = {...component.post};
+        const mockLikeList: LikeResponse = {...LongLikeList, count: 16};
+        likeSpy.getLikes.and.returnValue(of(mockLikeList));
+
+        fixture.detectChanges();
+
+        component.onLikePost();
+        expect(component.post.hasLiked).toBeTrue();
+        expect(component.post.count_likes).toBe(oldPost.count_likes + 1);
+        expect(component.likes.length).toEqual(15);
+        expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeTrue();
+      });
+    });
+
+    describe('onUnlikePost()', () => {
+      it('should call unlikePost', () => {
+
+      });
+
+      it('should update like info when list of likes is less than PAGE_SIZE', () => {
+
+      });
+
+      it('should correctly update like info when list of likes is greater than PAGE_SIZE', () => {
 
       })
+    });
 
-    })
+    describe('onShowLikes()', () => {
+      it('should toggle to true and call getLikes correctly', () => {
+
+      });
+
+      it('should toggle to false', () => {
+
+      })
+    });
+
+
+
+
   })
 });
 

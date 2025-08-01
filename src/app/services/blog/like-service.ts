@@ -1,11 +1,11 @@
 import { LikeInterface, LikeResponse } from './../../models/post.model';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'  
+  providedIn: 'root'
 })
 export class LikeService {
   private apiUrl = environment.apiUrl;
@@ -25,7 +25,7 @@ export class LikeService {
     return this.http.delete<LikeInterface>(`${this.apiUrl}/likes/${likeId}/`)
   }
 
-  unlikePost(userId: number, postId: number): Observable<LikeInterface | null> {
+  unlikePost(userId: number, postId: number) {
     return this.hasUserLikedPost(userId, postId).pipe(
       switchMap(response => {
         const results = response.results;
@@ -34,7 +34,7 @@ export class LikeService {
           return this.deleteLike(likeId)
         }
         else {
-          return of(null);
+          return throwError(() => ({error: "Like does not exists"}))
         }
       })
     );

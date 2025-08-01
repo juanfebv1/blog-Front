@@ -42,7 +42,7 @@
     flex: 1 1 50%;
 
     .comment-counter {
-      margin-left: 0.5rem;
+      margin-left: 1rem;
     }
 
   }
@@ -58,9 +58,12 @@
       justify-content: space-evenly;
 
       .like-button {
+        display: inline-block;
         padding: 1rem;
-        height: 2rem;
-        cursor: pointer;
+        width: 3rem;
+        height: 3rem;
+        border: 0;
+        background-color: inherit;
         background-repeat: no-repeat;
       }
 

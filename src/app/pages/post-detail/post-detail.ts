@@ -33,7 +33,11 @@ export class PostDetail {
   currentPageComments = signal(0);
   commentCount = signal(0);
 
-  startComment = computed(() => Math.max(0, (this.currentPageComments() - 1)* 5 + 1));
+  startComment = computed(() => {
+    if(this.commentCount() > 0) {
+      return (this.currentPageComments() - 1) * 5 + 1
+    } else return 0;
+  })
   endComment = computed(() => Math.min(this.commentCount(), this.currentPageComments() * 5));
 
   userCanComment = false;
@@ -102,10 +106,10 @@ export class PostDetail {
     this.commentService.commentPost(this.postId,this.newComment)
     .subscribe((comment) => {
       if (this.comments && this.comments.length < 5) {
-        this.comments?.push(comment);
+        this.comments.push(comment);
+        this.commentCount.set(this.commentCount() + 1);
       } else {
-        this.status = 'loading';
-        this.getComments().subscribe(() => this.status = 'ready')
+        this.getComments().subscribe()
       }
       this.newComment = '';
     }

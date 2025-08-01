@@ -17,19 +17,20 @@
   </div>
   <div class="post-panel">
     <div class="likes-comments-counter">
-      <a (click)="onShowLikes()" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{likesCount}} {{likesCount == 1 ? 'Like' : 'Likes'}}</a>
-      <a class="comment-counter" (click)="goToDetail()"> {{post.count_comments}} {{post.count_comments == 1 ? 'Comment' : 'Comments'}}</a>
+      <a (click)="onShowLikes()" role="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{post.count_likes}} {{post.count_likes == 1 ? 'Like' : 'Likes'}}</a>
+      <a class="comment-counter" role="button" (click)="goToDetail()"> {{post.count_comments}} {{post.count_comments == 1 ? 'Comment' : 'Comments'}}</a>
     </div>
     <div class="interact-buttons">
-      @if (currentUserId) {
+      @if (authService.isLoggedInSig()) {
         <div class="like-comment-container">
-          <div
+          <button
             class="like-button"
-            [class.like]="!likeFromCurrentUser"
-            [class.dislike]="likeFromCurrentUser"
-            (click)="likeFromCurrentUser ? onUnlikePost() : onLikePost()"
+            aria-label="Toggle like"
+            [class.like]="!post.hasLiked"
+            [class.dislike]="post.hasLiked"
+            (click)="post.hasLiked ? onUnlikePost() : onLikePost()"
           >
-          </div>
+          </button>
           <button (click)="goToDetail()">Comment</button>
        </div>
         <div [style.visibility]="showEditButtons ? 'visible' : 'hidden'" class="edit-buttons">
