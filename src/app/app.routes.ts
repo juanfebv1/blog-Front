@@ -4,7 +4,8 @@ import { Login } from './pages/login/login';
 import { Home } from './pages/home/home';
 import { PostDetail } from './pages/post-detail/post-detail';
 import { NotFound } from './pages/not-found/not-found';
-import { PostCreate } from './pages/post-create/post-create';
+import { PostCreation } from './pages/post-creation/post-creation';
+import { PostEditing } from './pages/post-editing/post-editing';
 
 export const routes: Routes = [
   {
@@ -30,7 +31,11 @@ export const routes: Routes = [
   },
   {
     path: 'create',
-    component: PostCreate
+    component: PostCreation
+  },
+  {
+    path: 'posts/edit/:id',
+    component: PostEditing
   },
   {
     path:'**',
@@ -40,5 +45,6 @@ export const routes: Routes = [
     path: 'not-found',
     component: NotFound
   },
+
 
 ];

@@ -11,7 +11,7 @@ import { Nav } from '../../shared/nav/nav';
 
 @Component({
   selector: 'app-post-detail',
-  imports: [DatePipe, FormsModule, Nav],
+  imports: [DatePipe, FormsModule],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.scss'
 })

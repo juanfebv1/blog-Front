@@ -9,12 +9,14 @@
     gap: 0.5rem;
     margin-top: 0.25rem;
     h1 {
-      flex: 1 1 35%;
+      flex: 1 1 45%;
+      text-wrap: inherit;
       min-width: 200px;
+      overflow-wrap: break-word;
     }
     .post-info {
       display: flex;
-      flex: 1 1 60%;
+      flex: 1 1 50%;
       justify-content: flex-end;
       align-items: center;
       flex-wrap: wrap;

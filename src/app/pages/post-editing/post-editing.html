@@ -1,0 +1,8 @@
+<app-post-form
+  *ngIf="status === 'ready'"
+  [initialValues]="initialValues()"
+  [submitButtonName]="'Save changes'"
+  (submitForm)="saveChanges($event)"
+>
+
+</app-post-form>

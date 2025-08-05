@@ -1,0 +1,80 @@
+<div class="container creation-form">
+  <form [formGroup]="form" (ngSubmit)="submitPost()">
+    <div class="form-title">
+      <h2>Title*:</h2>
+      <input
+        formControlName="title"
+        id="title"
+        type="text"
+      >
+      <small [style.visibility]="titleError">{{ titleError }}</small>
+    </div>
+    <div class="form-content">
+      <h2>Content*:</h2>
+      <textarea
+      rows="10"
+        formControlName="content"
+        id="content"
+      >
+      </textarea>
+      <small [style.visibility]="contentError"> {{ contentError }}</small>
+    </div>
+    <div class="form-permissions">
+      <div class="title">
+        <h2>Permissions</h2>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Access</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Public</td>
+            <td>
+              <select formControlName="publicPermission" id="publicPermission">
+              @for (option of publicPermissionOptions; track $index) {
+                <option [value]="option.key">{{option.label}}</option>
+              }
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Authenticated</td>
+            <td>
+              <select formControlName="authenticatedPermission" id="authenticatedPermission">
+              @for (option of permissionOptions; track $index) {
+                <option [value]="option.key">{{option.label}}</option>
+              }
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Team</td>
+            <td>
+              <select formControlName="teamPermission" id="teamPermission">
+              @for (option of permissionOptions; track $index) {
+                <option [value]="option.key">{{option.label}}</option>
+              }
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Author</td>
+            <td>
+              <select formControlName="authorPermission" id="authorPermission">
+                <option [value]="permissionOptions[2].key">{{permissionOptions[2].label}}</option>
+            </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="buttons">
+      <button type="submit" [disabled]="isSubmitting">{{ submitButtonName }}</button>
+      <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,80 @@
+.creation-form {
+  display: flex;
+  margin-top: 2.5rem;
+  width: 100%;
+  form {
+    width: 100%;
+    .form-title{
+      display: flex;
+      gap: 1rem;
+
+      input {
+        padding: 0.25rem;
+        font-size: 130%;
+        width: 40%;
+      }
+    }
+
+    .form-content {
+      textarea {
+        width: 100%;
+        font-size: 120%;
+        padding: 0.5rem;
+      }
+    }
+
+    .form-permissions {
+      margin: 1.5rem auto;
+      position: relative;
+      border: 2px solid;
+      .title {
+        position: absolute;
+        left: 1rem;
+        top: -1rem;
+        background-color: var(--mat-sys-surface);
+        padding: 0.25rem;
+        h2 {
+          margin: 0;
+        }
+      }
+
+      table {
+        margin: 2rem auto;
+        width: 75%;
+        tr {
+          display: flex;
+          gap: 2rem;
+          margin: 1rem auto;
+          align-items: center;
+          th, td {
+            flex: 1 1 50%;
+
+          }
+        }
+        select {
+          padding: 0.25rem ;
+          width: 80%;
+          height: 3rem;
+          text-align: center;
+          font-size: 100%;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: flex-end;
+
+      button {
+        font-size: 125%;
+        padding: 0.5rem 0.75rem;
+      }
+    }
+  }
+}
+
+small {
+  color: red;
+}

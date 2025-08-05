@@ -1,3 +1,4 @@
+
 export interface PostInterfaceResponse {
   id: number,
   title: string,
@@ -16,6 +17,14 @@ export interface PostInterfaceResponse {
 
 export interface PostInterface extends PostInterfaceResponse {
   hasLiked: boolean
+}
+
+export interface PostCreateInterface {
+  title: string | null,
+  content: string | null,
+  public_permission: boolean | null,
+  authenticated_permission: number | null,
+  team_permission: number | null,
 }
 
 export interface LikeInterface {

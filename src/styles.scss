@@ -44,7 +44,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding-left: 1rem;  // equivalent to Tailwind px-4 (16px)
   padding-right: 1rem;
 
+  @media (max-width: 768px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
   // Responsive max-widths (default Tailwind breakpoints)
+  // @media (min-width: 328px) {
+  //   max-width: 328px;
+  // }
   @media (min-width: 640px) {
     max-width: 640px; // sm
   }

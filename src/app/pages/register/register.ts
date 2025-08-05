@@ -88,7 +88,6 @@ export class Register {
     this.authService.register(dataUser)
     .subscribe({
       next: () => {
-
         this.notify.displayNotification('Registration successful!', REDIRECT_DELAY)
         setTimeout(() => this.router.navigateByUrl('/login'), REDIRECT_DELAY)
       },
