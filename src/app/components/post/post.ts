@@ -1,5 +1,5 @@
 import { LikeInterface } from './../../models/post.model';
-import { Component, effect, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { PostInterface } from '../../models/post.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
@@ -31,44 +31,23 @@ export class Post {
   prevLikesPage: string | null = '';
   nextLikesPage: string | null = '';
   showLikes = false;
-  // currentUserId = this.authService.currentUserSig()?.id;
-  showEditButtons = false;
 
-  constructor() {
-    effect(() => {
-      const dummyAuthSubscriptor = this.authService.currentUserSig()?.id
-      this.showEditButtons = this.userCanEdit();
-    })
-  }
-
-  userCanEdit() {
+  get userCanEdit() {
     const user = this.authService.currentUserSig();
     if (!this.authService.isLoggedInSig() || !user) {
       return false;
     }
-    if (this.post.email === user.email) return true;
-
-    if (this.post.authenticated_permission > 1) return true;
+    if (this.post.email === user.email) {
+      return true;
+    }
+    if (this.post.authenticated_permission > 1){
+      return true;
+    }
 
     if (this.post.team_permission > 1 && Number(this.post.team) === Number(user.team)) {
       return true;
     }
     return false;
-  }
-
-  onDelete() {
-    const confirmDelete = this.deleteDialog.open(DeletePostDialog, {
-      minWidth: '300px',
-      data: this.post.id
-    });
-    confirmDelete.closed.subscribe((result) => {
-      if (typeof result === 'number') {
-        this.postService.deletePost(result)
-        .subscribe(() => {
-          window.location.href = '';
-        })
-      }
-    })
   }
 
   onLikePost() {
@@ -130,9 +109,25 @@ export class Post {
     this.getLikes(this.nextLikesPage);
   }
 
-
   goToDetail() {
     this.router.navigate([`/posts/${this.post.id}`]);
+  }
+
+  onDelete() {
+    const confirmDelete = this.deleteDialog.open(DeletePostDialog, {
+      minWidth: '300px',
+      data: this.post.id
+    });
+    confirmDelete.closed.subscribe((result) => {
+      if (typeof result === 'number') {
+        this.postService.deletePost(result)
+        .subscribe(() => {
+          this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+            this.router.navigate(['/posts']);
+          });
+        })
+      }
+    })
   }
 }
 
@@ -140,9 +135,11 @@ export class Post {
   selector: 'delete-post-dialog',
   template:`
     <div class="delete-dialog">
-      <p>Are you sure you want to delete this post?</p>
-      <button (click)="confirmDelete.close(data)">Delete</button>
-      <button (click)="confirmDelete.close()">Cancel</button>
+      <h2>Are you sure you want to delete this post?</h2>
+      <div class="buttons">
+        <button class="delete" (click)="confirmDelete.close(data)">Delete</button>
+        <button (click)="confirmDelete.close()">Cancel</button>
+      </div>
     </div>
   `,
   styleUrl: './post.scss'

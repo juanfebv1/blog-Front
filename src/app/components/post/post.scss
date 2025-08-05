@@ -99,8 +99,26 @@
 }
 
 .delete-dialog {
-  border: solid 1px black;
-  background-color: white ;
+  border: solid 2px black;
+  background-color: white;
+  padding: 1rem;
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    button {
+      width: 5rem;
+      height: 2.5rem;
+      font-size: 100%;
+    }
+
+    .delete {
+      background-color: rgb(182, 3, 3);
+      color: white;
+    }
+  }
 }
 
 

@@ -258,7 +258,8 @@ export const LongLikeList: LikeResponse = {
         "username": "breyner",
         "email": "breyner@email.com",
         "liked_at": new Date("2025-07-31T20:55:53.148527Z")
-    },    {
+    },
+    {
         "id": 211,
         "post": 127,
         "user": 4,

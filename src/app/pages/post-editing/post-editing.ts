@@ -27,12 +27,12 @@ export class PostEditing {
   private authService = inject(Auth);
   private router = inject(Router);
   private postService = inject(PostService);
-  private notificationService = inject(Notification);
   private route = inject(ActivatedRoute);
+  private notification = inject(Notification);
 
   status: 'init' | 'loading' | 'ready' = 'init';
 
-  postId: number = -1;
+  post!: PostInterface;
 
   initialValues = signal<PostFormInterface>({
     title: '',
@@ -55,14 +55,10 @@ export class PostEditing {
         }
       }),
       switchMap((post) => {
-        if (!this.userCanEditPost()) {
-          return throwError(() => ({error: "Invalid permission"}))
-        } else {
-          return of(post);
+        this.post = post;
+        if (!this.userCanEdit()) {
+          return throwError(() => ({error: "Forbidden access to the post"}))
         }
-      }),
-      tap((post) => {
-        this.postId = post.id;
         const initialForm: PostFormInterface = {
           title: post.title,
           content: post.content,
@@ -70,8 +66,8 @@ export class PostEditing {
           authenticatedPermission: post.authenticated_permission,
           teamPermission: post.team_permission
         }
-
         this.initialValues.set(initialForm);
+        return of(post);
       })
     )
     .subscribe({
@@ -79,18 +75,37 @@ export class PostEditing {
         this.status = 'ready';
       },
       error: (error) => {
-        this.router.navigateByUrl('not-found');
         console.error(error);
+        this.notification.displayNotification('Post not found or inaccesible', 3000);
+        this.router.navigateByUrl('not-found');
       }
     })
   }
 
-  userCanEditPost() {
-    return true;
+  userCanEdit() {
+    const user = this.authService.currentUserSig();
+
+    if (!this.authService.isLoggedInSig() || !user) return false;
+
+    if (this.post?.email === user.email) return true;
+
+    if (this.post.authenticated_permission > 1) return true;
+
+    if (this.post.team_permission > 1 && Number(this.post.team) === Number(user.team)) {
+      return true;
+    }
+    console.log("Didn't evaluate", this.post)
+    return false;
   }
 
   saveChanges(post: PostCreateInterface) {
-    console.log("Guardando datos: ", post);
+    this.postService.editPost(this.post.id, post)
+    .subscribe({
+      next: () => {
+        this.notification.displayNotification('Post successfully edited', 2000);
+        setTimeout(() => this.router.navigateByUrl(`/posts/${this.post.id}`), 1500);
+      }
+    })
   }
 
 

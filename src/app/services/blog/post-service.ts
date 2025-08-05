@@ -28,6 +28,6 @@ export class PostService {
   }
 
   editPost(postId: number, payload: PostCreateInterface) {
-    return this.http.put(`${this.apiUrl}/posts/`, payload);
+    return this.http.put(`${this.apiUrl}/posts/${postId}/`, payload);
   }
 }

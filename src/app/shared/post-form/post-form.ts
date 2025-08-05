@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, Query } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Auth } from '../../services/auth';
 import { PostService } from '../../services/blog/post-service';
@@ -6,11 +6,14 @@ import { Router } from '@angular/router';
 import { PostCreateInterface } from '../../models/post.model';
 import { Notification } from '../../services/notification';
 import { Location } from '@angular/common';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import type { Editor } from '@ckeditor/ckeditor5-core';
 
 @Component({
   selector: 'app-post-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CKEditorModule],
   templateUrl: './post-form.html',
   styleUrl: './post-form.scss'
 })
@@ -18,6 +21,8 @@ export class PostForm implements OnInit {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private location = inject(Location);
+
+
 
   @Input() initialValues!: {
     title: string;
@@ -31,12 +36,21 @@ export class PostForm implements OnInit {
 
   form!: FormGroup;
 
+  public Editor = ClassicEditor
+  editorConfig = {
+    placeholder: 'Write your content here...',
+    toolbar: [
+      'heading', '|',
+      'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+      'undo', 'redo'
+    ]
+  };
+
   titleError = '';
   contentError = '';
 
-  isSubmitting = false;
-
   @Input() submitButtonName!: string;
+  isSubmitting = false;
 
   permissionOptions = [
     { key: 0, label: 'None' },
@@ -50,7 +64,6 @@ export class PostForm implements OnInit {
   ];
 
   ngOnInit(): void {
-    console.log("Recibiendo: ", this.initialValues);
     this.form = this.formBuilder.group({
       title: [this.initialValues.title, [Validators.required]],
       content: [this.initialValues.content, [Validators.required]],

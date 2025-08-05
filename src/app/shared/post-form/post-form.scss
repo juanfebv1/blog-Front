@@ -78,3 +78,8 @@
 small {
   color: red;
 }
+
+::ng-deep .ck-editor__editable_inline {
+  min-height: 150px;
+  max-height: 250px;
+}

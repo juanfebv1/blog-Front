@@ -20,8 +20,8 @@
       <a (click)="onShowLikes()" role="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{post.count_likes}} {{post.count_likes == 1 ? 'Like' : 'Likes'}}</a>
       <a class="comment-counter" role="button" (click)="goToDetail()"> {{post.count_comments}} {{post.count_comments == 1 ? 'Comment' : 'Comments'}}</a>
     </div>
-    <div class="interact-buttons">
-      @if (authService.isLoggedInSig()) {
+    @if (authService.isLoggedInSig()) {
+      <div class="interact-buttons">
         <div class="like-comment-container">
           <button
             class="like-button"
@@ -32,13 +32,13 @@
           >
           </button>
           <button (click)="goToDetail()">Comment</button>
-       </div>
-        <div [style.visibility]="showEditButtons ? 'visible' : 'hidden'" class="edit-buttons">
-          <button>Edit</button>
+        </div>
+        <div [style.visibility]="userCanEdit ? 'visible' : 'hidden'" class="edit-buttons">
+          <button [routerLink]="`/posts/edit/${post.id}`">Edit</button>
           <button (click)="onDelete()">Delete</button>
         </div>
-      }
-    </div>
+      </div>
+    }
   </div>
 </div>
 

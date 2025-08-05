@@ -6,18 +6,21 @@
         formControlName="title"
         id="title"
         type="text"
+        placeholder="Type your post title"
       >
-      <small [style.visibility]="titleError">{{ titleError }}</small>
+    <small [style.visibility]="titleError ? 'visible' : 'hidden'">{{ titleError }}</small>
     </div>
     <div class="form-content">
       <h2>Content*:</h2>
-      <textarea
-      rows="10"
+      <ckeditor
+        [editor]="Editor"
         formControlName="content"
-        id="content"
-      >
-      </textarea>
-      <small [style.visibility]="contentError"> {{ contentError }}</small>
+        [config]="{
+          placeholder: 'Type your blog post...',
+          toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
+          }"
+        ></ckeditor>
+      <small [style.visibility]="contentError ? 'visible' : 'hidden'"> {{ contentError }}</small>
     </div>
     <div class="form-permissions">
       <div class="title">

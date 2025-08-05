@@ -22,7 +22,7 @@ export class LikeService {
   }
 
   deleteLike(likeId: number) {
-    return this.http.delete<LikeInterface>(`${this.apiUrl}/likes/${likeId}/`)
+    return this.http.delete(`${this.apiUrl}/likes/${likeId}/`)
   }
 
   unlikePost(userId: number, postId: number) {
