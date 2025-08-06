@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
 fdescribe('Post user logged in', () => {
   let component: Post;
   let fixture: ComponentFixture<Post>;
-  let authSpy: jasmine.SpyObj<Auth>;
+  let authSpy: jasmine.SpyObj<Auth>;  
   let postSpy: jasmine.SpyObj<PostService>;
   let likeSpy: jasmine.SpyObj<LikeService>;
   let mockIsLoggedInSig = signal(true);
@@ -85,6 +85,8 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, email:"user@email.com"};
       fixture.detectChanges();
       expect(component.userCanEdit).toBeTrue();
+
+      const editElement = fixture.nativeElement.querySelector('edit-buttons')
     });
 
     it('should allow edit if auth permission is edit', () => {
@@ -228,7 +230,7 @@ fdescribe('Post user logged in', () => {
       expect(deleteDialogSpy).toHaveBeenCalled();
       expect(postSpy.deletePost).toHaveBeenCalledWith(component.post.id);
     }));
-    
+
   })
 });
 

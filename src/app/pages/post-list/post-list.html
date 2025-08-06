@@ -5,24 +5,22 @@
     }
   </div>
   <div class="posts-nav">
-
-    <button
-      class="prev-page"
-      (click)="prevPagePosts()"
+    <i
+      class="fa-solid fa-angle-left fa-2x"
       [style.visibility]="prevPage? 'visible' : 'hidden'"
+      (click)="prevPagePosts()"
     >
-      Prev page
-    </button>
+    </i>
     <p class="counter">
       {{startPost()}} - {{endPost()}} of {{countPosts()}}
     </p>
-    <button
-      class="next-page"
-      (click)="nextPagePosts()"
+
+    <i
+      class="fa-solid fa-angle-right fa-2x"
       [style.visibility]="nextPage? 'visible' : 'hidden'"
+      (click)="nextPagePosts()"
     >
-      Next page
-    </button>
+    </i>
   </div>
 </div>
 

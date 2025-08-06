@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Nav } from '../../shared/nav/nav';
 import { PostList } from '../post-list/post-list';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,5 +10,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.scss'
 })
 export class Home {
+  private router = inject(Router);
 
+  goCreate() {
+    this.router.navigateByUrl('create');
+  }
 }

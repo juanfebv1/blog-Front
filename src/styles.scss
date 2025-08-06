@@ -6,6 +6,12 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+
+:root {
+  --main-color: #faf9fd;
+  --second-color: rgb(103, 194, 194);
+}
+
 html {
   @include mat.theme((
     color: (
@@ -24,7 +30,8 @@ html {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
+  // background-color: var(--mat-sys-surface);
+  background-color: var(--main-color);
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 }/* You can add global styles to this file, and also import other style files */

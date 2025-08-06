@@ -1,13 +1,14 @@
 import { PostService } from './../../services/blog/post-service';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { catchError, concatMap, of, switchMap, tap, toArray, throwError } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 import { CommentInterface, PostInterface } from '../../models/post.model';
 import { DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { CommentService } from '../../services/blog/comment-service';
 import { FormsModule } from '@angular/forms';
-import { Nav } from '../../shared/nav/nav';
+
+const COMMENT_PAGE_SIZE = 5;
 
 @Component({
   selector: 'app-post-detail',
@@ -35,7 +36,7 @@ export class PostDetail {
 
   startComment = computed(() => {
     if(this.commentCount() > 0) {
-      return (this.currentPageComments() - 1) * 5 + 1
+      return (this.currentPageComments() - 1) * COMMENT_PAGE_SIZE + 1
     } else return 0;
   })
   endComment = computed(() => Math.min(this.commentCount(), this.currentPageComments() * 5));
@@ -105,7 +106,7 @@ export class PostDetail {
   submitComment() {
     this.commentService.commentPost(this.postId,this.newComment)
     .subscribe((comment) => {
-      if (this.comments && this.comments.length < 5) {
+      if (this.comments && this.comments.length < COMMENT_PAGE_SIZE) {
         this.comments.push(comment);
         this.commentCount.set(this.commentCount() + 1);
       } else {

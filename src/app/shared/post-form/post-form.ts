@@ -84,23 +84,23 @@ export class PostForm implements OnInit {
 
     publicCtrl.valueChanges.subscribe((value) => {
       const publicCtrlValue = value ? 1 : 0;
-      if (authenticatedCtrl.value && publicCtrlValue > authenticatedCtrl.value) {
+      if (publicCtrlValue > authenticatedCtrl.value) {
         authenticatedCtrl.setValue(publicCtrlValue);
       }
     });
 
     authenticatedCtrl.valueChanges.subscribe((value) => {
       const publicCtrlValue = publicCtrl.value ? 1 : 0;
-      if (value && publicCtrlValue > value) {
+      if (publicCtrlValue > value) {
         publicCtrl.setValue(value > 0);
       }
-      if (value && teamCtrl.value && value > teamCtrl.value) {
+      if (value > teamCtrl.value) {
         teamCtrl.setValue(value);
       }
     });
 
     teamCtrl.valueChanges.subscribe((value) => {
-      if (value && authenticatedCtrl.value && authenticatedCtrl.value > value) {
+      if (authenticatedCtrl.value > value) {
         authenticatedCtrl.setValue(value);
       }
     });

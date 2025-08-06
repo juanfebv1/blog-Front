@@ -7,39 +7,41 @@
       <p> {{ post.posted_on |  date:'short'}}</p>
     </div>
   </div>
-  <div class="post-content">
-    @if(post.content.length < 200){
-      <p>{{ post.content}}</p>
-    }
-    @else {
-      <p> {{ post.content.slice(0,200) + ' ..... '}} <a [routerLink]="`/posts/${post.id}`"> Show More</a></p>
-    }
-  </div>
+  <div class="post-content" [innerHTML]="adjustedContent"></div>
   <div class="post-panel">
     <div class="likes-comments-counter">
-      <a (click)="onShowLikes()" role="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin"> {{post.count_likes}} {{post.count_likes == 1 ? 'Like' : 'Likes'}}</a>
-      <a class="comment-counter" role="button" (click)="goToDetail()"> {{post.count_comments}} {{post.count_comments == 1 ? 'Comment' : 'Comments'}}</a>
+      <a (click)="onShowLikes()" role="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+        {{ countLikes() }} {{ countLikes() == 1 ? 'Like' : 'Likes' }}
+      </a>
+      <a class="comment-counter" role="button" (click)="goToDetail()">
+        {{ post.count_comments }} {{ post.count_comments == 1 ? 'Comment' : 'Comments' }}
+      </a>
     </div>
+
     @if (authService.isLoggedInSig()) {
       <div class="interact-buttons">
-        <div class="like-comment-container">
-          <button
-            class="like-button"
-            aria-label="Toggle like"
-            [class.like]="!post.hasLiked"
-            [class.dislike]="post.hasLiked"
-            (click)="post.hasLiked ? onUnlikePost() : onLikePost()"
-          >
-          </button>
-          <button (click)="goToDetail()">Comment</button>
+        <div class="left-buttons">
+          @if(post.hasLiked){
+            <i (click)="onUnlikePost()" class="fa fa-heart interact"></i>
+          } @else {
+            <i (click)="onLikePost()" class="far fa-heart interact"></i>
+          }
+          <i [routerLink]="`${post.id}`" class="far fa-commenting interact" aria-hidden="true"></i>
         </div>
-        <div [style.visibility]="userCanEdit ? 'visible' : 'hidden'" class="edit-buttons">
-          <button [routerLink]="`/posts/edit/${post.id}`">Edit</button>
-          <button (click)="onDelete()">Delete</button>
+
+        <div class="right-buttons">
+          @if (userCanEdit) {
+            <i [routerLink]="`/posts/edit/${post.id}`" class="fa fa-pen-to-square interact"></i>
+            <i (click)="onDelete()" class="fa fa-trash interact"></i>
+          } @else {
+            <!-- Reservamos espacio aunque no tenga permisos -->
+            <span class="empty-space"></span>
+          }
         </div>
       </div>
     }
   </div>
+
 </div>
 
 <ng-template
@@ -51,16 +53,18 @@
 >
   <div class="likes-list-overlay">
     <p>List of likes</p>
-    @if(prevLikesPage) {
-      <button>Prev</button>
-    }
     @for (like of likes; track $index) {
       <div>
         <p> {{like.email}}</p>
       </div>
     }
+    @if(prevLikesPage) {
+      <i class="fa-solid fa-angle-left"></i>
+    }
+    <p> {{startLikes()}} - {{endLikes()}} of {{countLikes()}}</p>
+
     @if (nextLikesPage) {
-      <button>Next</button>
+      <i class="fa-solid fa-angle-right"></i>
     }
   </div>
 </ng-template>

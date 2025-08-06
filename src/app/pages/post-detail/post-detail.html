@@ -13,9 +13,7 @@
         <p> {{ post?.posted_on |  date:'short'}}</p>
       </div>
     </div>
-    <div class="post-content">
-      <p> {{ post?.content }}</p>
-    </div>
+    <div class="post-content" [innerHTML]="post?.content"></div>
     <div class="likes-counter">
       <p>{{ post?.count_likes}} {{post?.count_likes === 1 ? 'Like' : 'Likes'}}</p>
     </div>

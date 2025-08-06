@@ -1,5 +1,28 @@
 .create-post-button {
   position: fixed;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 2rem;
+  right: 2rem;
+  font-size: 4rem;
+  color: var(--second-color);
+  background-color: var(--main-color);
+  cursor: pointer;
+  padding: 1rem;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover{
+    transform: scale(1.1);
+  }
+
+  @media (min-width: 480px) {
+    font-size: 5rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 6rem;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 7.5rem;
+  }
+
 }

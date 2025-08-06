@@ -26,67 +26,59 @@
       }
     }
   }
-
-  .post-content {
-    a {
-      font-size: 1.5rem;
-    }
-  }
 }
 
+::ng-deep .show-more {
+  color: blue;
+  font-size: 110%;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 0.35rem;
+}
 
 .post-panel {
   display: flex;
-  align-items: center;
+  gap: 1rem;
   margin-bottom: 1rem;
 
   .likes-comments-counter {
-    flex: 1 1 50%;
-
+    flex: 1 1 70%;
+    display: flex;
+    align-items: end;
     .comment-counter {
       margin-left: 1rem;
     }
-
+    @media(min-width: 768px) {
+      flex:1 1 50%;
+    }
   }
 
   .interact-buttons {
-    flex: 1 1 50%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: center;
+    // width: 100%;
+    flex: 1 1 30%;
 
-    .like-comment-container {
-      flex: 1 1 50%;
+    .left-buttons, .right-buttons {
       display: flex;
-      justify-content: space-evenly;
-
-      .like-button {
-        display: inline-block;
-        padding: 1rem;
-        width: 3rem;
-        height: 3rem;
-        border: 0;
-        background-color: inherit;
-        background-repeat: no-repeat;
-      }
-
-      .like{
-        background-image: url('/like-empty.svg');
-      }
-      .dislike {
-        background-image: url('/like-full.svg');
-      }
+      gap: 1rem;
+      align-items: center;
     }
 
-    .edit-buttons {
-      flex: 1 1 50%;
-      display: flex;
-      justify-content: space-evenly;
-      margin-right: 3rem;
-      * {
-        margin: 0 1rem;
-      }
+    .right-buttons {
+      margin-right: 6rem;
+      min-width: 6rem; // reserva espacio aunque no haya botones
+      justify-content: flex-end;
+    }
+
+    .empty-space {
+      width: 6rem; // igual que .right-buttons para ocupar espacio
+      height: 1px; // mínimo alto para no romper diseño
+      display: block;
     }
   }
+
 }
 
 .likes-list-overlay {
@@ -121,10 +113,27 @@
   }
 }
 
-
-
-button, a {
+.interact {
   cursor: pointer;
-  padding: 0.25rem;
-  margin-right: 0.25rem;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.interact {
+  font-size: 1.2rem;
+
+  @media (min-width: 480px) {
+    font-size: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 1.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 2rem;
+  }
 }
