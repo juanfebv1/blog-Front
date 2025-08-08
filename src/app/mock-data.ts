@@ -1,4 +1,4 @@
-import { LikeInterface, LikeResponse, PostInterface, PostInterfaceResponse } from "./models/post.model";
+import { CommentInterface, CommentResponse, LikeInterface, LikeResponse, PostInterface, PostInterfaceResponse } from "./models/post.model";
 import { UserProfile } from "./models/user.model";
 
 export const mockUser: UserProfile = {
@@ -340,7 +340,7 @@ export const mockBasePost: PostInterface =
   team_permission: 1,
   public_permission: true,
   count_likes: 8,
-  count_comments: 14,
+  count_comments: 4,
   hasLiked: true
 }
 
@@ -351,4 +351,121 @@ export const mockLike: LikeInterface = {
   username: "mockUser",
   email: "mockUser@email.com",
   liked_at: new Date()
+}
+
+export const longText =
+"There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc."
+
+export const mockCommentShortList: CommentResponse =
+{
+  "prevPage": null,
+  "nextPage": null,
+  "currentPage": 1,
+  "pages": 1,
+  "count": 4,
+  "results": [
+    {
+      "id": 51,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Some comment just for fun",
+      "commented_at": new Date()
+    },
+    {
+      "id": 52,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Just just for fun, sure?",
+      "commented_at": new Date()
+    },
+    {
+      "id": 53,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Yes, it's for sure",
+      "commented_at": new Date()
+    },
+    {
+      "id": 54,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "nooooo",
+      "commented_at": new Date()
+    }
+  ]
+}
+
+export const mockComment: CommentInterface = {
+  "id": 1,
+  "post": 197,
+  "user": 1,
+  "username": "juan",
+  "email": "juan@email.com",
+  "content": "Some comment just for fun",
+  "commented_at": new Date()
+};
+
+
+export const mockCommentLongList: CommentResponse =
+{
+  "prevPage": null,
+  "nextPage": "http://127.0.0.1:8000/api/comments/?page=2&post=197",
+  "currentPage": 1,
+  "pages": 2,
+  "count": 6,
+  "results": [
+    {
+      "id": 51,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Some comment just for fun",
+      "commented_at": new Date()
+    },
+    {
+      "id": 52,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Just just for fun, sure?",
+      "commented_at": new Date()
+    },
+    {
+      "id": 53,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "Yes, it's for sure",
+      "commented_at": new Date()
+    },
+    {
+      "id": 54,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "nooooo",
+      "commented_at": new Date()
+    },
+    {
+      "id": 55,
+      "post": 197,
+      "user": 4,
+      "username": "juan",
+      "email": "juan@email.com",
+      "content": "afgadfgfadg",
+      "commented_at": new Date()
+    }
+  ]
 }

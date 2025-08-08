@@ -8,7 +8,6 @@ import { Notification } from '../../services/notification';
 import { Location } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import type { Editor } from '@ckeditor/ckeditor5-core';
 
 @Component({
   selector: 'app-post-form',
@@ -17,12 +16,10 @@ import type { Editor } from '@ckeditor/ckeditor5-core';
   templateUrl: './post-form.html',
   styleUrl: './post-form.scss'
 })
-export class PostForm implements OnInit {
+export class PostForm {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private location = inject(Location);
-
-
 
   @Input() initialValues!: {
     title: string;
@@ -36,15 +33,7 @@ export class PostForm implements OnInit {
 
   form!: FormGroup;
 
-  public Editor = ClassicEditor
-  editorConfig = {
-    placeholder: 'Write your content here...',
-    toolbar: [
-      'heading', '|',
-      'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
-      'undo', 'redo'
-    ]
-  };
+  public Editor = ClassicEditor;
 
   titleError = '';
   contentError = '';

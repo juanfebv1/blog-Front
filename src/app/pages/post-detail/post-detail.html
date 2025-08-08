@@ -6,16 +6,16 @@
   }
   @else {
     <div class="post-header">
-      <h1>{{ post?.title }}</h1>
+      <h1>{{ post.title }}</h1>
       <div class="post-info">
-        <p>{{ post?.team_name }}</p>
-        <p> {{ post?.username }}</p>
-        <p> {{ post?.posted_on |  date:'short'}}</p>
+        <p>{{ post.team_name }}</p>
+        <p> {{ post.username }}</p>
+        <p> {{ post.posted_on |  date:'short'}}</p>
       </div>
     </div>
-    <div class="post-content" [innerHTML]="post?.content"></div>
+    <div class="post-content" [innerHTML]="post.content"></div>
     <div class="likes-counter">
-      <p>{{ post?.count_likes}} {{post?.count_likes === 1 ? 'Like' : 'Likes'}}</p>
+      <p>{{ post.count_likes}} {{post.count_likes === 1 ? 'Like' : 'Likes'}}</p>
     </div>
     <div class="comments-container">
       <h2>Comments</h2>
@@ -46,7 +46,7 @@
         <h2>Add New Comment</h2>
         <textarea [(ngModel)]="newComment" rows="3" placeholder="Write your comment..."></textarea>
         <div class="add-comment-buttons">
-          <button class="submit-but" (click)="submitComment()">Submit</button>
+          <button class="submit-but" (click)="submitComment()" [disabled]="isSubmitting">Submit</button>
           <button (click)="newComment=''">Cancel</button>
         </div>
       </div>

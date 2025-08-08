@@ -14,4 +14,10 @@ export class Notification {
       verticalPosition: 'top',
     });
   }
+
+  displaySomethingWentWrong() {
+    this.displayNotification(
+      'Something went wrong', 3000
+    )
+  }
 }

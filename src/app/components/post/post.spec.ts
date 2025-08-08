@@ -5,16 +5,17 @@ import { Auth } from '../../services/auth';
 import { PostService } from '../../services/blog/post-service';
 import { LikeService } from '../../services/blog/like-service';
 import { signal, WritableSignal } from '@angular/core';
-import { likesList, LongLikeList, mockBasePost, mockLike, mockUser } from '../../mock-data';
+import { likesList, LongLikeList, longText, mockBasePost, mockLike, mockUser } from '../../mock-data';
 import { of } from 'rxjs';
 import { UserProfile } from '../../models/user.model';
 import { LikeResponse } from '../../models/post.model';
 import { RouterModule } from '@angular/router';
+import { PostList } from '../../pages/post-list/post-list';
 
-fdescribe('Post user logged in', () => {
+describe('Post user logged in', () => {
   let component: Post;
   let fixture: ComponentFixture<Post>;
-  let authSpy: jasmine.SpyObj<Auth>;  
+  let authSpy: jasmine.SpyObj<Auth>;
   let postSpy: jasmine.SpyObj<PostService>;
   let likeSpy: jasmine.SpyObj<LikeService>;
   let mockIsLoggedInSig = signal(true);
@@ -46,7 +47,11 @@ fdescribe('Post user logged in', () => {
 
 
     await TestBed.configureTestingModule({
-      imports: [Post, RouterModule.forRoot([])],
+      imports: [Post,
+        RouterModule.forRoot([
+          {path: 'posts', component: PostList},
+          {path: 'dummy', component: PostList}
+        ])],
       providers: [
         {provide: Auth, useValue: authSpy},
         {provide: PostService, useValue: postSpy},
@@ -66,16 +71,28 @@ fdescribe('Post user logged in', () => {
   });
 
   it('should initialize correctly with post and user info', fakeAsync(() => {
-    fixture.detectChanges();
-    tick();
     expect(component.post.count_likes).toEqual(mockBasePost.count_likes);
     expect(component.userCanEdit).toBeFalse();
     expect(component.post.hasLiked).toBeTrue();
+
+    const showMoreElement = fixture.nativeElement.querySelector('.show-more');
+    expect(showMoreElement).toBeFalsy();
   }));
 
   it('should interact with post', () => {
     const interactElement = fixture.nativeElement.querySelector('.interact-buttons');
     expect(interactElement).toBeTruthy();
+  });
+
+  it('should display show more button if content exceeds size', () => {
+    fixture = TestBed.createComponent(Post);
+    component = fixture.componentInstance;
+    component.post = {...mockBasePost, content: longText};
+    fixture.detectChanges();
+
+    const showMoreElement = fixture.nativeElement.querySelector('.show-more');
+    expect(showMoreElement).toBeTruthy();
+
   })
 
   describe('userCanEdit()', () => {
@@ -86,7 +103,8 @@ fdescribe('Post user logged in', () => {
       fixture.detectChanges();
       expect(component.userCanEdit).toBeTrue();
 
-      const editElement = fixture.nativeElement.querySelector('edit-buttons')
+      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
+      expect(editElement).toBeTruthy();
     });
 
     it('should allow edit if auth permission is edit', () => {
@@ -95,6 +113,9 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, authenticated_permission: 2};
       fixture.detectChanges();
       expect(component.userCanEdit).toBeTrue();
+
+     const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
+      expect(editElement).toBeTruthy();
     });
 
     it('should allow edit if team permission is edit and user same team', () => {
@@ -103,6 +124,9 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, team_permission: 2};
       fixture.detectChanges();
       expect(component.userCanEdit).toBeTrue();
+
+      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
+      expect(editElement).toBeTruthy();
     });
 
     it('should not allow edit if auth permission 1 and different team', () => {
@@ -113,6 +137,10 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, authenticated_permission: 1, team_permission: 2};
       fixture.detectChanges();
       expect(component.userCanEdit).toBeFalse();
+
+      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
+      expect(editElement).toBeFalsy();
+
       mockUserSig.set(mockUser);
     });
 
@@ -122,6 +150,9 @@ fdescribe('Post user logged in', () => {
       component.post = {...mockBasePost, team_permission: 0};
       fixture.detectChanges();
       expect(component.userCanEdit).toBeFalse();
+
+      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
+      expect(editElement).toBeFalsy();
     });
   })
 
@@ -140,9 +171,10 @@ fdescribe('Post user logged in', () => {
       expect(component.post.hasLiked).toBeTrue();
       expect(component.post.count_likes).toBe(mockBasePost.count_likes + 1);
       expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeTrue();
+
     });
 
-    it('should correctly update like info when list of likes is greater than PAGE_SIZE', () => {
+    it('should correctly update like info when list of likes is greater than PAGE_SIZE', fakeAsync(() => {
       fixture = TestBed.createComponent(Post);
       component = fixture.componentInstance;
 
@@ -154,11 +186,22 @@ fdescribe('Post user logged in', () => {
       fixture.detectChanges();
 
       component.onLikePost();
+      tick();
       expect(component.post.hasLiked).toBeTrue();
-      expect(component.post.count_likes).toBe(oldPost.count_likes + 1);
+      expect(component.countLikes()).toBe(oldPost.count_likes + 1);
       expect(component.likes.length).toEqual(15);
       expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeTrue();
-    });
+    }));
+
+    it('should display correct liked logo', () => {
+      component.onLikePost();
+      const likedIcon = fixture.nativeElement.querySelector('.fa.fa-heart');
+      expect(likedIcon).toBeTruthy();
+
+      const likeIcon = fixture.nativeElement.querySelector('.far.fa-heart');
+      expect(likeIcon).toBeFalsy();
+    })
+
   });
 
   describe('onUnlikePost()', () => {
@@ -199,6 +242,18 @@ fdescribe('Post user logged in', () => {
       expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeFalse();
     });
 
+    it('should display correct liked logo', () => {
+      component.onUnlikePost();
+
+      fixture.detectChanges();
+
+      const likedIcon = fixture.nativeElement.querySelector('.fa.fa-heart');
+      expect(likedIcon).toBeFalsy();
+
+      const likeIcon = fixture.nativeElement.querySelector('.far.fa-heart');
+      expect(likeIcon).toBeTruthy();
+    });
+
   });
 
   describe('onShowLikes()', () => {
@@ -234,7 +289,7 @@ fdescribe('Post user logged in', () => {
   })
 });
 
-fdescribe('Post when user not logged in', () => {
+describe('Post when user not logged in', () => {
   let component: Post;
   let fixture: ComponentFixture<Post>;
   let authSpy: jasmine.SpyObj<Auth>;

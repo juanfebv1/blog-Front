@@ -7,6 +7,7 @@ import { DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
 import { CommentService } from '../../services/blog/comment-service';
 import { FormsModule } from '@angular/forms';
+import { Notification } from '../../services/notification';
 
 const COMMENT_PAGE_SIZE = 5;
 
@@ -22,11 +23,11 @@ export class PostDetail {
   authService = inject(Auth);
   private postService = inject(PostService);
   private commentService = inject(CommentService);
+  private notification = inject(Notification);
 
   status : 'init' | 'loading' | 'ready' = 'init';
 
-  postId: number = -1;
-  post: PostInterface | null = null;
+  post!: PostInterface;
 
   comments: CommentInterface[] | null = [];
   prevPageComments: string | null = null;
@@ -43,6 +44,7 @@ export class PostDetail {
 
   userCanComment = false;
   newComment: string = '';
+  isSubmitting = false;
 
   constructor() {
     effect(() => {
@@ -56,8 +58,7 @@ export class PostDetail {
       switchMap((params) => {
         const postId = params.get('id');
         if (postId){
-          this.postId = Number(postId)
-          return this.postService.getPost(this.postId);
+          return this.postService.getPost(Number(postId));
         }
         return of(null);
       }),
@@ -80,7 +81,7 @@ export class PostDetail {
   }
 
   getComments(page: string | null = null) {
-    return this.commentService.getComments(this.postId, page).pipe(
+    return this.commentService.getComments(this.post.id, page).pipe(
       tap((response) => {
         this.comments = response.results;
         this.prevPageComments = response.prevPage;
@@ -104,8 +105,10 @@ export class PostDetail {
   }
 
   submitComment() {
-    this.commentService.commentPost(this.postId,this.newComment)
-    .subscribe((comment) => {
+    this.isSubmitting = true;
+    this.commentService.commentPost(this.post.id,this.newComment)
+    .subscribe({
+      next: (comment) => {
       if (this.comments && this.comments.length < COMMENT_PAGE_SIZE) {
         this.comments.push(comment);
         this.commentCount.set(this.commentCount() + 1);
@@ -113,8 +116,13 @@ export class PostDetail {
         this.getComments().subscribe()
       }
       this.newComment = '';
+      this.isSubmitting = false;
+    },
+    error: (error) => {
+      this.notification.displaySomethingWentWrong();
+      console.error(error);
     }
-  )
+    })
   }
 
 }

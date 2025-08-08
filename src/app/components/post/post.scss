@@ -31,9 +31,17 @@
 ::ng-deep .show-more {
   color: blue;
   font-size: 110%;
+  background-color: var(--main-color);
+  border: 0;
   cursor: pointer;
+  padding: 0.25rem;
   text-decoration: underline;
   margin-left: 0.35rem;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .post-panel {
@@ -60,7 +68,7 @@
     // width: 100%;
     flex: 1 1 30%;
 
-    .left-buttons, .right-buttons {
+    .like-comment-buttons, .edit-delete-buttons {
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -88,6 +96,14 @@
   text-align: center;
   padding: 10px;
   margin: 0;
+
+  .counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
 }
 
 .delete-dialog {

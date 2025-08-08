@@ -1,5 +1,5 @@
 import { LikeInterface } from './../../models/post.model';
-import { Component, computed, ElementRef, inject, Input, Renderer2, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, Input, Renderer2, signal, ViewChild } from '@angular/core';
 import { PostInterface } from '../../models/post.model';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Auth } from '../../services/auth';
@@ -9,7 +9,8 @@ import { Dialog, DIALOG_DATA, DialogModule, DialogRef } from '@angular/cdk/dialo
 import { PostService } from '../../services/blog/post-service';
 import { Router, RouterLink } from '@angular/router';
 import truncate from 'html-truncate';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { filter, switchMap } from 'rxjs';
 
 
 
@@ -46,13 +47,12 @@ export class Post {
 
   startLikes = computed(() => {
     if (this.countLikes() > 0) {
-      return Math.max(0, (this.currentLikesPage() - 1) * 10 + 1);
+      return Math.max(0, (this.currentLikesPage() - 1) * LIKE_PAGE_SIZE + 1);
     } else {
       return 0
     }
   })
-  endLikes = computed(() => Math.min(this.countLikes(), this.currentLikesPage() * 10));
-
+  endLikes = computed(() => Math.min(this.countLikes(), this.currentLikesPage() * LIKE_PAGE_SIZE));
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -60,28 +60,12 @@ export class Post {
     private renderer: Renderer2
   ) {}
 
-
-  private listenerAttached = false;
-
-  ngAfterViewChecked() {
-
-    this.attachClickShowMore();
+  ngOnInit() {
+    this.countLikes.set(this.post.count_likes);
   }
 
   ngOnChanges() {
     this.countLikes.set(this.post.count_likes);
-    this.listenerAttached = false;
-  }
-
-
-  attachClickShowMore() {
-    if (!this.listenerAttached) {
-      const showMoreLink = this.elRef.nativeElement.querySelector('.show-more');
-      if (showMoreLink) {
-        this.renderer.listen(showMoreLink, 'click', () => this.goToDetail());
-        this.listenerAttached = true;
-      }
-    }
   }
 
   get userCanEdit() {
@@ -108,26 +92,36 @@ export class Post {
     const plainContent = temp.textContent || '';
     if (plainContent.length >= 200){
       const newContent = truncate(this.post.content, 200);
-      const showMoreTag = '<a class="show-more">Show More</a>';
+      const showMoreTag = '<button class="show-more">Show More</button>';
       const idx = newContent.lastIndexOf('<');
+
       if (idx === -1){
         return this.sanitizer.bypassSecurityTrustHtml(newContent + showMoreTag);
       } else {
-        const newHtmlTag = newContent.substring(0, idx) + showMoreTag + newContent.substring(idx);
-        return this.sanitizer.bypassSecurityTrustHtml(newHtmlTag)
+        return this.sanitizer.bypassSecurityTrustHtml(
+          newContent.substring(0, idx) + showMoreTag + newContent.substring(idx)
+        );
       }
     }
+
     return this.sanitizer.bypassSecurityTrustHtml(this.post.content);
   }
 
+  onContentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.className === 'show-more'){
+      this.goToDetail();
+    }
+  }
 
   onLikePost() {
     this.likeService.likePost(this.post.id)
     .subscribe({
       next: (response) => {
-        if(this.post.count_likes + 1 > LIKE_PAGE_SIZE){
+        if(this.countLikes() + 1 > LIKE_PAGE_SIZE){
           this.getLikes();
         } else {
+          this.post.count_likes = this.post.count_likes + 1;
           this.countLikes.update((value) => value + 1);
           this.likes = [...this.likes, response];
         }
@@ -143,6 +137,7 @@ export class Post {
       .subscribe({
         next: () => {
           this.post.hasLiked = false;
+          this.post.count_likes = this.post.count_likes - 1;
           this.likes = this.likes.filter((like) => like.user != user.id);
           this.countLikes.update((value) => value - 1);
         },
@@ -187,20 +182,15 @@ export class Post {
   }
 
   onDelete() {
-    const confirmDelete = this.deleteDialog.open(DeletePostDialog, {
+    this.deleteDialog.open(DeletePostDialog, {
       minWidth: '300px',
       data: this.post.id
-    });
-    confirmDelete.closed.subscribe((result) => {
-      if (typeof result === 'number') {
-        this.postService.deletePost(result)
-        .subscribe(() => {
-          this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-            this.router.navigate(['/posts']);
-          });
-        })
-      }
-    })
+    }).closed.pipe(
+      filter((result): result is number => typeof result === 'number'),
+      switchMap(id => this.postService.deletePost(id)),
+      switchMap(() => this.router.navigateByUrl('/dummy', { skipLocationChange: true })),
+      switchMap(() => this.router.navigate(['/posts']))
+    ).subscribe();
   }
 }
 
