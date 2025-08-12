@@ -3,18 +3,11 @@ import { Auth } from '../../services/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../../services/blog/post-service';
 import { Notification } from '../../services/notification';
-import { catchError, of, switchMap, tap, throwError } from 'rxjs';
-import { PostCreateInterface, PostInterface } from '../../models/post.model';
+import { of, switchMap, throwError } from 'rxjs';
+import { PostCreateInterface, PostFormInterface, PostInterfaceResponse } from '../../models/post.model';
 import { PostForm } from '../../shared/post-form/post-form';
 import { CommonModule } from '@angular/common';
 
-interface PostFormInterface {
-    title: string;
-    content: string;
-    publicPermission: boolean;
-    authenticatedPermission: number;
-    teamPermission: number;
-  };
 
 @Component({
   selector: 'app-post-editing',
@@ -30,33 +23,31 @@ export class PostEditing {
   private route = inject(ActivatedRoute);
   private notification = inject(Notification);
 
+  postId!: Number;
   status: 'init' | 'loading' | 'ready' = 'init';
 
-  post!: PostInterface;
-
-  initialValues = signal<PostFormInterface>({
+  initialValues: PostFormInterface = {
     title: '',
     content: '',
     publicPermission: true,
     authenticatedPermission: 1,
     teamPermission: 2,
-  })
+  }
 
   constructor() {
     this.status = 'loading';
     this.route.paramMap.pipe(
       switchMap((params) => {
-        const postId = params.get('id');
-        if (postId){
-          return this.postService.getPost(Number(postId));
+        const paramId = params.get('id');
+        const postId = Number(paramId);
+        if (Number.isNaN(postId)) {
+          return throwError(() => ({error: "Invalid url"}));
         }
-        else {
-          return throwError(() => ({error: "Invalid url"}))
-        }
-      }),
+        this.postId = postId;
+        return this.postService.getPost(postId);
+        }),
       switchMap((post) => {
-        this.post = post;
-        if (!this.userCanEdit()) {
+        if (!this.userCanEdit(post)) {
           return throwError(() => ({error: "Forbidden access to the post"}))
         }
         const initialForm: PostFormInterface = {
@@ -66,7 +57,7 @@ export class PostEditing {
           authenticatedPermission: post.authenticated_permission,
           teamPermission: post.team_permission
         }
-        this.initialValues.set(initialForm);
+        this.initialValues = initialForm;
         return of(post);
       })
     )
@@ -82,28 +73,27 @@ export class PostEditing {
     })
   }
 
-  userCanEdit() {
+  userCanEdit(post: PostInterfaceResponse) {
     const user = this.authService.currentUserSig();
 
     if (!this.authService.isLoggedInSig() || !user) return false;
 
-    if (this.post?.email === user.email) return true;
+    if (post.email === user.email) return true;
 
-    if (this.post.authenticated_permission > 1) return true;
+    if (post.authenticated_permission > 1) return true;
 
-    if (this.post.team_permission > 1 && Number(this.post.team) === Number(user.team)) {
+    if (post.team_permission > 1 && Number(post.team) === Number(user.team)) {
       return true;
     }
-    console.log("Didn't evaluate", this.post)
     return false;
   }
 
   saveChanges(post: PostCreateInterface) {
-    this.postService.editPost(this.post.id, post)
+    this.postService.editPost(Number(this.postId), post)
     .subscribe({
       next: () => {
         this.notification.displayNotification('Post successfully edited', 2000);
-        setTimeout(() => this.router.navigateByUrl(`/posts/${this.post.id}`), 1500);
+        setTimeout(() => this.router.navigateByUrl(`/posts/${this.postId}`), 1500);
       }
     })
   }

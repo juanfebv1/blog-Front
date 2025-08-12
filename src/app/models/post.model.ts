@@ -16,7 +16,7 @@ export interface PostInterfaceResponse {
 }
 
 export interface PostInterface extends PostInterfaceResponse {
-  hasLiked: boolean
+  hasLiked?: boolean
 }
 
 export interface PostCreateInterface {
@@ -26,6 +26,14 @@ export interface PostCreateInterface {
   authenticated_permission: number | null,
   team_permission: number | null,
 }
+
+export interface PostFormInterface {
+  title: string;
+  content: string;
+  publicPermission: boolean;
+  authenticatedPermission: number;
+  teamPermission: number;
+};
 
 export interface LikeInterface {
   id: number,

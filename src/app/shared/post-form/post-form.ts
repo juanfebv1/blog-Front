@@ -1,10 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, Query } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Auth } from '../../services/auth';
-import { PostService } from '../../services/blog/post-service';
 import { Router } from '@angular/router';
 import { PostCreateInterface } from '../../models/post.model';
-import { Notification } from '../../services/notification';
 import { Location } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -119,8 +116,10 @@ export class PostForm {
     const origin = window.location.origin;
 
     if (previousUrl.includes(origin)) {
+      console.log('Going back in app because origin: ', origin);
       this.location.back();
     } else {
+      console.log('Going home because origin: ', origin);
       this.router.navigateByUrl('');
     }
   }

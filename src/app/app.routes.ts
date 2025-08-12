@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { Register } from './pages/register/register';
 import { Login } from './pages/login/login';
-import { Home } from './pages/home/home';
 import { PostDetail } from './pages/post-detail/post-detail';
 import { NotFound } from './pages/not-found/not-found';
 import { PostCreation } from './pages/post-creation/post-creation';
 import { PostEditing } from './pages/post-editing/post-editing';
+import { PostList } from './pages/post-list/post-list';
 
 export const routes: Routes = [
   {
@@ -23,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'posts',
-    component: Home
+    component: PostList
   },
   {
     path: 'posts/:id',

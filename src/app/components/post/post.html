@@ -2,7 +2,9 @@
   <div class="post-header">
     <h1>{{ post.title }}</h1>
     <div class="post-info">
-      <p> {{ post.team_name }}</p>
+      <div class="team">
+        <p> {{ post.team_name }}</p>
+      </div>
       <p> {{ post.username }}</p>
       <p> {{ post.posted_on |  date:'short'}}</p>
     </div>
@@ -10,12 +12,12 @@
   <div class="post-content" [innerHTML]="adjustedContent" (click)="onContentClick($event)"></div>
   <div class="post-panel">
     <div class="likes-comments-counter">
-      <a (click)="onShowLikes()" role="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+      <button (click)="onShowLikes()" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
         {{ countLikes() }} {{ countLikes() == 1 ? 'Like' : 'Likes' }}
-      </a>
-      <a class="comment-counter" role="button" (click)="goToDetail()">
+      </button>
+      <button (click)="goToDetail()">
         {{ post.count_comments }} {{ post.count_comments == 1 ? 'Comment' : 'Comments' }}
-      </a>
+      </button>
     </div>
 
     @if (authService.isLoggedInSig()) {
@@ -53,19 +55,12 @@
   <div class="likes-list-overlay">
     <p>List of likes</p>
     <div class="counter">
-      @if(prevLikesPage) {
-        <i (click)="getPrevLikesPage()" class="fa-solid fa-angle-left"></i>
-      }
+      <i [style.visibility]="prevLikesPage ? 'visible' : 'hidden'" (click)="getPrevLikesPage()" class="fa-solid fa-angle-left"></i>
       <p> {{startLikes()}} - {{endLikes()}} of {{countLikes()}}</p>
-
-      @if (nextLikesPage) {
-        <i (click)="getNextLikesPage()" class="fa-solid fa-angle-right"></i>
-      }
+      <i [style.visibility]="nextLikesPage ? 'visible' : 'hidden'" (click)="getNextLikesPage()" class="fa-solid fa-angle-right"></i>
     </div>
     @for (like of likes; track $index) {
-      <div>
-        <p> {{like.email}}</p>
-      </div>
+      <p class="like"> {{like.username}}</p>
     }
   </div>
 </ng-template>

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { LikeResponse, PostCreateInterface, PostInterface, PostResponse } from '../../models/post.model';
+import { LikeResponse, PostCreateInterface, PostInterface, PostInterfaceResponse, PostResponse } from '../../models/post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +20,11 @@ export class PostService {
   }
 
   getPost(postId: number) {
-    return this.http.get<PostInterface>(`${this.apiUrl}/posts/${postId}/`);
+    return this.http.get<PostInterfaceResponse>(`${this.apiUrl}/posts/${postId}/`);
   }
 
   createPost(post: PostCreateInterface ) {
-    return this.http.post(`${this.apiUrl}/posts/`, post);
+    return this.http.post<PostInterfaceResponse>(`${this.apiUrl}/posts/`, post);
   }
 
   editPost(postId: number, payload: PostCreateInterface) {

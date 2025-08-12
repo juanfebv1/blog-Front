@@ -1,6 +1,6 @@
-<nav class="container">
-  <div class="logo">
-    <p>Avanzatech Blog</p>
+<nav>
+  <div routerLink="" class="logo">
+      <img src="Logo_Horizontal_Color.webp" >
   </div>
   <div [style.visibility]="user ? 'visible' : 'hidden'" class="welcome">
     <h2>Welcome, {{user && user.username.length < 15 ? user.username : user?.username?.slice(0,14) + '...'}}</h2>

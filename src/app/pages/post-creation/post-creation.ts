@@ -6,7 +6,7 @@ import { PostService } from '../../services/blog/post-service';
 import { PostCreateInterface } from '../../models/post.model';
 import { Notification } from '../../services/notification';
 
-@Component({
+@Component({ 
   selector: 'app-post-creation',
   imports: [PostForm],
   templateUrl: './post-creation.html',
@@ -36,14 +36,13 @@ export class PostCreation {
   }
 
   onSubmitPost(post: PostCreateInterface) {
-    console.log("Llamando con: ", post);
     this.postService.createPost(post).subscribe({
       next: () => {
         this.notificationService.displayNotification('Post successfully created', 1500);
         setTimeout(() => this.router.navigateByUrl(''), 1500);
       },
       error: () => {
-        this.notificationService.displayNotification('Something went wrong', 3000);
+        this.notificationService.displaySomethingWentWrong();
       }
     });
   }

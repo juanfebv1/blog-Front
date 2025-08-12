@@ -46,9 +46,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .container {
   width: 100%;
+  margin-top: 80px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;  // equivalent to Tailwind px-4 (16px)
+  padding-left: 1rem;  
   padding-right: 1rem;
 
   @media (max-width: 768px) {

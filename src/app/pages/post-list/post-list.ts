@@ -6,6 +6,7 @@ import { Auth } from '../../services/auth';
 import { LikeService } from '../../services/blog/like-service';
 import { catchError, count, map, of, zip } from 'rxjs';
 import { Notification } from '../../services/notification';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class PostList {
   private likeService = inject(LikeService);
   private authService = inject(Auth);
   private notification = inject(Notification);
+  private router = inject(Router);
 
   posts = signal<PostInterface[]>([]);
   prevPage: string | null = null;
@@ -29,10 +31,11 @@ export class PostList {
   startPost = computed(() => Math.max(0, (this.currentPage() - 1) * 10 + 1));
   endPost = computed(() => Math.min(this.countPosts(), this.currentPage() * 10));
 
+  userLoggedIn = false;
 
   constructor() {
     effect(() => {
-      const dummyAuthSubscriptor = this.authService.isLoggedInSig();
+      this.userLoggedIn = this.authService.isLoggedInSig();
       this.getPostList();
     })
   }
@@ -59,6 +62,10 @@ export class PostList {
     });
   }
 
+  goCreate() {
+    this.router.navigateByUrl('create');
+  }
+
   handlePostResponse(response: PostResponse) {
     this.prevPage = response.prevPage;
     this.nextPage = response.nextPage;
@@ -68,8 +75,8 @@ export class PostList {
     const posts = response.results;
     const user = this.authService.currentUserSig()?.id;
     if (!user) {
-      const postWithHasLiked = posts.map(post => ({...post, hasLiked: false}));
-      this.posts.set(postWithHasLiked);
+      const postsWithHasLiked = posts.map(post => ({...post, hasLiked: false}));
+      this.posts.set(postsWithHasLiked);
       return;
     }
 

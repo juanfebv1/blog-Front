@@ -337,11 +337,28 @@ export const mockBasePost: PostInterface =
   team_name: "string",
   posted_on: new Date().toISOString(),
   authenticated_permission: 1,
-  team_permission: 1,
+  team_permission: 2,
   public_permission: true,
   count_likes: 8,
   count_comments: 4,
   hasLiked: true
+}
+
+export const mockBasePostResponse: PostInterfaceResponse =
+{
+  id: 1,
+  title: 'string',
+  content: "string",
+  username: "string",
+  email: "other@email.com",
+  team: 1,
+  team_name: "string",
+  posted_on: new Date().toISOString(),
+  authenticated_permission: 1,
+  team_permission: 2,
+  public_permission: true,
+  count_likes: 8,
+  count_comments: 4
 }
 
 export const mockLike: LikeInterface = {
@@ -409,7 +426,7 @@ export const mockComment: CommentInterface = {
   "user": 1,
   "username": "juan",
   "email": "juan@email.com",
-  "content": "Some comment just for fun",
+  "content": "Some new comment for test",
   "commented_at": new Date()
 };
 
@@ -469,3 +486,14 @@ export const mockCommentLongList: CommentResponse =
     }
   ]
 }
+
+export const mockInitialFormDefaultValues = {
+  title: 'Title',
+  content: 'Content',
+  publicPermission: false,
+  authenticatedPermission: 0,
+  teamPermission: 0,
+  authorPermission: 2
+}
+
+

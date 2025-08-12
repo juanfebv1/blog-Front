@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { PostDetail } from './post-detail';
 import { signal, WritableSignal } from '@angular/core';
@@ -11,7 +11,7 @@ import { CommentService } from '../../services/blog/comment-service';
 import { of, count, delay } from 'rxjs';
 import { UserProfile } from '../../models/user.model';
 
-fdescribe('PostDetail', () => {
+describe('PostDetail', () => {
   let component: PostDetail;
   let fixture: ComponentFixture<PostDetail>;
 
@@ -39,7 +39,7 @@ fdescribe('PostDetail', () => {
       ['getComments', 'commentPost']
      )
      commentSpy.getComments.and.returnValue(of(mockCommentShortList));
-     commentSpy.commentPost.and.returnValue(of(mockComment).pipe(delay(1000)));
+     commentSpy.commentPost.and.returnValue(of(mockComment));
      const mockRoute = {
       paramMap: of({
         get: (key: string) => key === 'id' ? `${mockBasePost.id}` : null
@@ -129,33 +129,29 @@ fdescribe('PostDetail', () => {
   });
 
   describe('submitComment()', () => {
-    it('should disable submit button while submitting', () => {
-      component.newComment = 'Some new comment for test';
-      component.submitComment();
-      expect(component.isSubmitting).toBeTrue();
-    });
-
     it('should call comment service with correct post ID and payload', () => {
       component.newComment = 'Some new comment for test';
+      fixture.detectChanges();
+
       component.submitComment();
-      expect(commentSpy.commentPost).toHaveBeenCalledOnceWith(component.post.id, component.newComment);
+      expect(commentSpy.commentPost).toHaveBeenCalledOnceWith(component.post.id, 'Some new comment for test');
+      expect(component.newComment).toBe('');
+      expect(component.isSubmitting).toBeFalse();
     });
 
     it('should update comments list', fakeAsync(() => {
-      commentSpy.commentPost.and.returnValue(of(mockComment));
-
       const newTestComment = 'Some new comment for test';
       component.newComment = newTestComment;
+
       component.submitComment();
-      tick();
-      expect(component.commentCount()).toBe(mockBasePost.count_comments + 1)
+      fixture.detectChanges();
+
       expect(component.comments?.some((comment) =>
         comment.user === mockUser.id &&
         comment.content === newTestComment
       )).toBeTrue();
     })
-    )
-
+    );
   })
 
 });

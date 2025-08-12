@@ -111,7 +111,7 @@ export class PostDetail {
       next: (comment) => {
       if (this.comments && this.comments.length < COMMENT_PAGE_SIZE) {
         this.comments.push(comment);
-        this.commentCount.set(this.commentCount() + 1);
+        this.commentCount.update(v => v + 1);
       } else {
         this.getComments().subscribe()
       }

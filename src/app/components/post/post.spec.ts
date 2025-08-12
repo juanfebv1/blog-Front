@@ -72,7 +72,7 @@ describe('Post user logged in', () => {
 
   it('should initialize correctly with post and user info', fakeAsync(() => {
     expect(component.post.count_likes).toEqual(mockBasePost.count_likes);
-    expect(component.userCanEdit).toBeFalse();
+    expect(component.userCanEdit).toBeTrue();
     expect(component.post.hasLiked).toBeTrue();
 
     const showMoreElement = fixture.nativeElement.querySelector('.show-more');

@@ -32,6 +32,11 @@
       text-align: center;
     }
 
+    .nav-comments {
+      display: flex;
+      gap: 1rem;
+    }
+
     .comments-list {
       padding-left: 0;
       .comment-header{

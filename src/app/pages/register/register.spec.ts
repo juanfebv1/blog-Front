@@ -70,7 +70,6 @@ describe('Register', () => {
     })
   );
 
-
   it('register submit button should be disabled when submitting', () => {
     component.isSubmitting = true;
     fixture.detectChanges();
@@ -197,7 +196,7 @@ describe('Register', () => {
         throwError( () => ({
         error: errorResponse
         }))
-      );  
+      );
       component.register();
       expect(component.emailError).toBe('This email already exists')
       expect(component.isSubmitting).toBe(false);

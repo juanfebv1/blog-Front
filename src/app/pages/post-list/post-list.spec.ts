@@ -168,8 +168,8 @@ describe('PostList', () => {
   }));
 
   it('next page posts', fakeAsync(() =>  {
-    component.nextPage = 'nextPageOfPosts'; // set nextPage instead of prevPage
-    component.nextPagePosts(); // <- Correct method
+    component.nextPage = 'nextPageOfPosts'; 
+    component.nextPagePosts();
 
     tick();
     fixture.detectChanges();
@@ -184,13 +184,29 @@ describe('PostList', () => {
 
   it('should mark hasLiked as false if not logged in user', fakeAsync(() => {
     authSpy.currentUserSig.set(null);
-    fixture = TestBed.createComponent(PostList);
-    component = fixture.componentInstance;
     fixture.detectChanges();
 
     component.posts().forEach(post => {
       expect(post.hasLiked).toBeFalse();
     });
+
+    authSpy.currentUserSig.set(mockUser);
   }));
+
+  it('should allow logged in users to create posts', () => {
+    const createElement = fixture.nativeElement.querySelector('.create-post-button');
+    expect(createElement.style.visibility).toBe('visible');
+  });
+
+  it('should not allow non-logged in users to create posts', () => {
+    authSpy.isLoggedInSig.set(false);
+    fixture.detectChanges();
+
+    const createElement = fixture.nativeElement.querySelector('.create-post-button');
+    expect(createElement.style.visibility).toBe('hidden');
+
+    authSpy.isLoggedInSig.set(true);
+  });
+
 
 });
