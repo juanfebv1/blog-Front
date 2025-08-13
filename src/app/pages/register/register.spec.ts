@@ -231,17 +231,14 @@ describe('Register', () => {
         error: errorResponse
         }))
       );
-      const notificationSpy = spyOn(TestBed.inject(Notification), 'displayNotification')
+      const errorNotificationSpy = spyOn(TestBed.inject(Notification), 'displaySomethingWentWrong')
 
       component.register();
       expect(component.emailError).toBe('');
       expect(component.usernameError).toBe('');
       expect(component.passwordError).toBe('');
       expect(component.confirmPasswordError).toBe('');
-      expect(notificationSpy).toHaveBeenCalledOnceWith(
-        'Ops, something happened. Try again, please.',
-        3000
-      );
+      expect(errorNotificationSpy).toHaveBeenCalled();
     });
 
   })

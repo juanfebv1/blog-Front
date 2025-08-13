@@ -15,10 +15,6 @@ export class PostService {
     return this.http.get<PostResponse>(url);
   }
 
-  deletePost(postId: number) {
-    return this.http.delete(`${this.apiUrl}/posts/${postId}/`);
-  }
-
   getPost(postId: number) {
     return this.http.get<PostInterfaceResponse>(`${this.apiUrl}/posts/${postId}/`);
   }
@@ -29,5 +25,9 @@ export class PostService {
 
   editPost(postId: number, payload: PostCreateInterface) {
     return this.http.put(`${this.apiUrl}/posts/${postId}/`, payload);
+  }
+
+  deletePost(postId: number) {
+    return this.http.delete(`${this.apiUrl}/posts/${postId}/`);
   }
 }

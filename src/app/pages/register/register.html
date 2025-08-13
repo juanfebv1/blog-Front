@@ -1,33 +1,23 @@
-
-<div class="register-form">
+<div class="container register-form">
   <div class="register-title">
     <h1>Create an account</h1>
   </div>
   <form [formGroup]="registerForm" (ngSubmit)="register()">
     <div class="form-group">
       <input formControlName="email" id="email" type="email" placeholder="Enter email">
-
-      @if (emailError) {
-        <small class="error"> {{ emailError }}</small>
-      }
+      <small [style.visibility]="emailError ? 'visible' : 'hidden'" class="error"> {{ emailError }}</small>
     </div>
     <div class="form-group">
       <input formControlName="username" id="username" type="text" placeholder="Enter username">
-      @if (usernameError) {
-        <small class="error"> {{ usernameError }}</small>
-      }
+      <small [style.visibility]="usernameError ? 'visible' : 'hidden'" class="error"> {{ usernameError }}</small>
     </div>
     <div class="form-group">
       <input formControlName="password" id="password" type="password" placeholder="Password">
-      @if (passwordError) {
-        <small class="error"> {{passwordError}} </small>
-      }
+      <small [style.visibility]="passwordError ? 'visible' : 'hidden'" class="error"> {{passwordError}} </small>
     </div>
     <div class="form-group">
       <input formControlName="confirmPassword" id="confirmPassword" type="password" placeholder="Confirm password">
-      @if (confirmPasswordError) {
-        <small class="error"> {{confirmPasswordError}} </small>
-      }
+      <small [style.visibility]="confirmPasswordError ? 'visible' : 'hidden'" class="error"> {{confirmPasswordError}} </small>
     </div>
     <button type="submit" [disabled]="isSubmitting"> Register</button>
   </form>
@@ -35,7 +25,6 @@
     <p> Have an account?</p>
     <a routerLink="/login" >Log in</a>
   </div>
-
 </div>
 
 

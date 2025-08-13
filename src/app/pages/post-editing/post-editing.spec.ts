@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PostCreateInterface, PostFormInterface, PostInterfaceResponse } from '../../models/post.model';
 import { By } from '@angular/platform-browser';
 
-fdescribe('PostEditing', () => {
+describe('PostEditing', () => {
   let component: PostEditing;
   let fixture: ComponentFixture<PostEditing>;
 

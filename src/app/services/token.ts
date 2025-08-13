@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 @Injectable({
@@ -15,9 +14,7 @@ export class Token {
     return localStorage.getItem('token');
   }
 
-  removeToken() {
-  localStorage.removeItem('token');
-  }
+  removeToken = () => localStorage.removeItem('token');
 
   saveRefreshToken(refresh: string) {
     localStorage.setItem('refresh', refresh);
@@ -31,9 +28,12 @@ export class Token {
     localStorage.removeItem('refresh');
   }
 
-  private isValidTokenHelper(token: string) {
+  private decode(token: string) {
+    return jwtDecode<JwtPayload>(token);
+  }
 
-    const decodedToken = jwtDecode<JwtPayload>(token);
+  private isValidTokenHelper(token: string) {
+    const decodedToken = this.decode(token);
     if(decodedToken && decodedToken.exp) {
       const tokenDate = new Date(0);
       tokenDate.setUTCSeconds(decodedToken.exp);

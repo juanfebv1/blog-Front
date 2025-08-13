@@ -123,7 +123,7 @@ export class PostForm {
       this.router.navigateByUrl('');
     }
   }
-
+ 
   handleValidationErrors() {
     const titleCtrl = this.form.controls['title'];
     const contentCtrl = this.form.controls['content'];

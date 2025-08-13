@@ -8,7 +8,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { CreateUserDTO, UserProfile } from '../models/user.model';
 import { environment } from '../../environments/environment';
 import { ADD_TOKEN } from '../interceptors/auth-interceptor';
-import { Notification } from './notification';
 import { Token } from './token';
 
 describe('Auth', () => {
@@ -30,10 +29,9 @@ describe('Auth', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        Auth,
         provideHttpClient(),
         provideHttpClientTesting(),
-        {provide: Token, useValue: tokenSpy}  
+        {provide: Token, useValue: tokenSpy}
       ]
     });
 

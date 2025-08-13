@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 
 import { Post } from './post';
 import { Auth } from '../../services/auth';
@@ -166,12 +166,13 @@ describe('Post user logged in', () => {
       fixture = TestBed.createComponent(Post);
       component = fixture.componentInstance;
       component.post = {...mockBasePost, hasLiked: false};
+      const oldCountLikes = mockBasePost.count_likes;
       fixture.detectChanges();
       component.onLikePost();
       expect(component.post.hasLiked).toBeTrue();
       expect(component.post.count_likes).toBe(mockBasePost.count_likes + 1);
       expect(component.likes.some((like) => like.user === authSpy.currentUserSig()?.id)).toBeTrue();
-
+      expect(component.countLikes()).toBe(oldCountLikes + 1);
     });
 
     it('should correctly update like info when list of likes is greater than PAGE_SIZE', fakeAsync(() => {

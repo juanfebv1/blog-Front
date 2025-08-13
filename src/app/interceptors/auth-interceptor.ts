@@ -18,8 +18,9 @@ export function dontAddToken() {
 }
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
-  if (!request.context.get(ADD_TOKEN)) return next(request);
-
+  if (!request.context.get(ADD_TOKEN)) {
+    return next(request);
+  }
   const tokenService = inject(Token);
   const http = inject(HttpClient);
   const token = tokenService.getToken();
@@ -27,12 +28,10 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
     return next(request);
   }
 
-
   const isValidToken = tokenService.isValidtoken();
   if (!isValidToken) {
     return updateAccessAndRefreshToken(request, next, tokenService, http);
   }
-
   return addToken(request, next, tokenService);
 };
 
@@ -42,7 +41,8 @@ function addToken(
   tokenService: Token
 ) {
   const accessToken = tokenService.getToken();
-  if (!accessToken) return next(request);
+  if (!accessToken)
+    return next(request);
 
   const authRequest = request.clone({
     headers: request.headers.set('Authorization', `Bearer ${accessToken}`)

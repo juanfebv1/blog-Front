@@ -135,7 +135,7 @@ export class Register {
       this.usernameError = 'This username already exists'
     }
     else {
-      this.notify.displayNotification('Ops, something happened. Try again, please.', ERROR_DELAY)
+      this.notify.displaySomethingWentWrong();
     }
   }
 }

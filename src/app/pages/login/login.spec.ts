@@ -18,7 +18,7 @@ class DummyRegisterComponent {}
 describe('Login', () => {
   let component: Login;
   let fixture: ComponentFixture<Login>;
-  let authSpy: jasmine.SpyObj<Auth>;  
+  let authSpy: jasmine.SpyObj<Auth>;
   let mockIsLoggedInSig = signal(false);
 
   beforeEach(async () => {
@@ -173,15 +173,12 @@ describe('Login', () => {
         error: errorResponse
         }))
       );
-      const notificationSpy = spyOn(TestBed.inject(Notification), 'displayNotification')
+      const notificationSpy = spyOn(TestBed.inject(Notification), 'displaySomethingWentWrong')
 
       component.login();
       expect(component.emailError).toBe('');
       expect(component.passwordError).toBe('');
-      expect(notificationSpy).toHaveBeenCalledOnceWith(
-        'Ops, something happened',
-        3000
-      );
+      expect(notificationSpy).toHaveBeenCalled();
     });
   })
 

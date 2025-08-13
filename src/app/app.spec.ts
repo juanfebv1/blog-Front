@@ -1,10 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { Auth } from './services/auth';
+import { RouterModule } from '@angular/router';
 
 describe('App', () => {
+  let authSpy: jasmine.SpyObj<Auth>;
+
   beforeEach(async () => {
+    authSpy = jasmine.createSpyObj('Auth', ['init'])
+
     await TestBed.configureTestingModule({
-      imports: [App],
+      imports: [App, RouterModule.forRoot([])],
+      providers: [
+        {provide: Auth, useValue: authSpy}
+      ]
     }).compileComponents();
   });
 
@@ -14,10 +23,4 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, blog');
-  });
 });

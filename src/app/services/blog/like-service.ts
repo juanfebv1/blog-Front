@@ -1,8 +1,8 @@
 import { LikeInterface, LikeResponse } from './../../models/post.model';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import {switchMap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

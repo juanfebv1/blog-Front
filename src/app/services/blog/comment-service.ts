@@ -21,9 +21,6 @@ export class CommentService {
       post: postId,
       content: content
     }
-    console.log(payload);
     return this.http.post<CommentInterface>(`${this.apiUrl}/comments/`, payload)
   }
-
-
 }

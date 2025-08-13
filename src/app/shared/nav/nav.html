@@ -1,4 +1,4 @@
-<nav>
+<nav class="browser-nav">
   <div routerLink="" class="logo">
       <img src="Logo_Horizontal_Color.webp" >
   </div>
@@ -7,11 +7,35 @@
   </div>
   <div class="log-buttons">
     @if(!user) {
-      <a routerLink="/register"> Register</a>
-      <a routerLink="/login"> Log in</a>
+      <div class="login-register">
+        <button routerLink="/register"> Register</button>
+        <button routerLink="/login"> Log in</button>
+      </div>
     }
     @else{
-      <a (click)="onLogout()"> Log out</a>
+      <button class="logout" (click)="onLogout()"> Log out</button>
+    }
+  </div>
+</nav>
+
+<nav class="mobile-nav">
+  <div routerLink="" class="logo">
+    <img src="Logo_Horizontal_Color.webp" >
+  </div>
+  <div [style.visibility]="user ? 'visible' : 'hidden'" class="welcome">
+    <h2>Hi, {{user && user.username.length < 15 ? user.username : user?.username?.slice(0,14) + '...'}}</h2>
+  </div>
+  <div class="log-buttons">
+    @if(!user) {
+      <div class="login-register">
+        <i ></i>
+        <button routerLink="/register"> Register</button>
+        <button routerLink="/login"> Log in</button>
+      </div>
+    }
+    @else{
+      <!-- <i (click)="onLogout()" class="fa-solid fa-right-from-bracket"></i> -->
+       <button (click)="onLogout()"> Log out</button>
     }
   </div>
 </nav>

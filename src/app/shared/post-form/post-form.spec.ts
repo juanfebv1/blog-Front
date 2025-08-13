@@ -192,6 +192,27 @@ describe('PostForm', () => {
     component.contentError = 'Some error';
     contentCtrl.setValue('Some content');
     expect(component.contentError).toBe('');
+  });
+
+  describe('onCancel()', () => {
+    const origin = window.location.origin;
+
+    it('should call location.back() when referrer is same origin', () => {
+      spyOnProperty(document, 'referrer').and.returnValue(`${origin}/some-page`);
+      component.onCancel();
+
+      expect(locationSpy.back).toHaveBeenCalled();
+      expect(routerSpy.navigateByUrl).not.toHaveBeenCalled();
+    });
+
+    it('should navigate to home when referrer is not same origin', () => {
+      spyOnProperty(document, 'referrer').and.returnValue('/differentUrl');
+      component.onCancel();
+
+      expect(locationSpy.back).not.toHaveBeenCalled();
+      expect(routerSpy.navigateByUrl).toHaveBeenCalledWith('');
+    })
+
   })
 
 });

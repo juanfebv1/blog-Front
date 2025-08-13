@@ -92,7 +92,7 @@ export class Login {
       this.invalidCredentialsError = 'Invalid credentials';
     }
     else {
-      this.notification.displayNotification('Ops, something happened', 3000);
+      this.notification.displaySomethingWentWrong();
     }
   }
 }

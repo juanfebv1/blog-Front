@@ -349,7 +349,7 @@ export const mockBasePostResponse: PostInterfaceResponse =
   id: 1,
   title: 'string',
   content: "string",
-  username: "string",
+  username: "string", 
   email: "other@email.com",
   team: 1,
   team_name: "string",

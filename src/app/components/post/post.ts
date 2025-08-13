@@ -14,7 +14,7 @@ import { filter, switchMap } from 'rxjs';
 
 
 
-const LIKE_PAGE_SIZE = 2;
+const LIKE_PAGE_SIZE = 15;
 
 @Component({
   selector: 'app-post',
@@ -149,7 +149,6 @@ export class Post {
   onShowLikes() {
     if(!this.showLikes) {
       this.getLikes();
-      // this.showLikes = true;
     } else {
       this.showLikes = false;
     }

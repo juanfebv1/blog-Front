@@ -36,7 +36,6 @@ html {
   font: var(--mat-sys-body-medium);
 }/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 *, *::before, *::after {
@@ -45,11 +44,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 .container {
+  height: auto;
   width: 100%;
   margin-top: 80px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;  
+  padding-left: 1rem;
   padding-right: 1rem;
 
   @media (max-width: 768px) {
