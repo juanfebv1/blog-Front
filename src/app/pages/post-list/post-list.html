@@ -4,24 +4,26 @@
       <app-post [post]="post"></app-post>
     }
   </div>
-  <div class="posts-nav">
-    <i
+  <div class="posts-nav-container">
+    <div class="posts-nav">
+      <i
       class="fa-solid fa-angle-left fa-2x interact"
       [style.visibility]="prevPage? 'visible' : 'hidden'"
       (click)="prevPagePosts()"
-    >
-    </i>
-    <p class="counter">
-      {{startPost()}} - {{endPost()}} of {{countPosts()}}
-    </p>
+      >
+      </i>
+      <p class="counter">
+        {{startPost()}} - {{endPost()}} of {{countPosts()}}
+      </p>
 
-    <i
+      <i
       class="fa-solid fa-angle-right fa-2x interact"
       [style.visibility]="nextPage? 'visible' : 'hidden'"
       (click)="nextPagePosts()"
-    >
+      >
     </i>
   </div>
+</div>
   <i [style.visibility]="userLoggedIn ? 'visible' : 'hidden'" (click)="goCreate()" class="fa-solid fa-circle-plus create-post-button"></i>
 
 </div>

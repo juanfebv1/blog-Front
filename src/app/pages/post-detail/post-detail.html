@@ -8,27 +8,40 @@
     <div class="post-header">
       <h1>{{ post.title }}</h1>
       <div class="post-info">
-        <p>{{ post.team_name }}</p>
-        <p> {{ post.username }}</p>
-        <p> {{ post.posted_on |  date:'short'}}</p>
+        <div class="team">
+          <h4>{{ post.team_name }}</h4>
+        </div>
+        <h4> {{ post.username }}</h4>
+        <h4> {{ post.posted_on |  date:'short'}}</h4>
       </div>
     </div>
     <div class="post-content" [innerHTML]="post.content"></div>
     <div class="likes-counter">
-      <p>{{ post.count_likes}} {{post.count_likes === 1 ? 'Like' : 'Likes'}}</p>
+      <p>{{ post.count_likes }} {{ post.count_likes === 1 ? 'Like' : 'Likes'}}</p>
     </div>
     <div class="comments-container">
       <h2>Comments</h2>
       <div class="nav-comments">
-        <button [style.visibility]="prevPageComments ? 'visible' : 'hidden'" (click)="onPrevPageComments()">Prev page</button>
+        <i
+        class="fa-solid fa-angle-left fa-2x interact"
+        [style.visibility]="prevPageComments()? 'visible' : 'hidden'"
+        (click)="onPrevPageComments()"
+        >
+        </i>
         <p>{{startComment()}} - {{endComment()}} of {{commentCount()}}</p>
-        <button [style.visibility]="nextPageComments ? 'visible' : 'hidden'" (click)="onNextPageComments()" >Next page</button>
+        <i
+          class="fa-solid fa-angle-right fa-2x interact"
+          [style.visibility]="endComment() < commentCount()? 'visible' : 'hidden'"
+          (click)="onNextPageComments()"
+        >
+
+        </i>
       </div>
       <ul class="comments-list">
         @for (comment of comments; track $index) {
           <div class="comment-header">
-            <p class="username">{{comment.username}}</p>
-            <p class="date">{{comment.commented_at | date: 'short'}}</p>
+            <h4 class="username">{{comment.username}}</h4>
+            <h4 class="date">{{comment.commented_at | date: 'short'}}</h4>
           </div>
           <div class="comment-content">
             <p>{{ comment.content }}</p>

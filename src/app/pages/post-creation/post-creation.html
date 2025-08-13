@@ -1,9 +1,10 @@
-<div class="container">
-  <h1>Create a post</h1>
+<div class="container title">
+    <h1> Create a post</h1>
 </div>
+
 <app-post-form
   [initialValues]="initialValues"
   [submitButtonName]="'Publish'"
   (submitForm)="onSubmitPost($event)"
-  >
+>
 </app-post-form>

@@ -1,17 +1,17 @@
 <div class="container creation-form">
   <form [formGroup]="form" (ngSubmit)="submitPost()">
     <div class="form-title">
-      <h2>Title*:</h2>
+      <h3>Title:</h3>
       <input
         formControlName="title"
         id="title"
         type="text"
         placeholder="Type your post title"
       >
-    <small [style.visibility]="titleError ? 'visible' : 'hidden'">{{ titleError }}</small>
+    <small [class.visible]="titleError">{{ titleError }}</small>
     </div>
     <div class="form-content">
-      <h2>Content*:</h2>
+      <h3>Content:</h3>
       <ckeditor
         [editor]="Editor"
         formControlName="content"
@@ -20,7 +20,7 @@
           toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
           }"
         ></ckeditor>
-      <small [style.visibility]="contentError ? 'visible' : 'hidden'"> {{ contentError }}</small>
+      <small [class.visible]="contentError"> {{ contentError }}</small>
     </div>
     <div class="form-permissions">
       <div class="title">
@@ -28,7 +28,7 @@
       </div>
       <table>
         <thead>
-          <tr>
+          <tr class="header-row">
             <th>Category</th>
             <th>Access</th>
           </tr>
@@ -76,8 +76,8 @@
       </table>
     </div>
     <div class="buttons">
-      <button type="submit" [disabled]="isSubmitting">{{ submitButtonName }}</button>
-      <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
+      <button type="submit" class="submit" [disabled]="isSubmitting">{{ submitButtonName }}</button>
+      <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
     </div>
   </form>
 </div>

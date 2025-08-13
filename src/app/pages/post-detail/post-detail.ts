@@ -30,10 +30,10 @@ export class PostDetail {
   post!: PostInterface;
 
   comments: CommentInterface[] | null = [];
-  prevPageComments: string | null = null;
-  nextPageComments: string | null = null;
   currentPageComments = signal(0);
   commentCount = signal(0);
+  prevPageComments = computed(() => this.currentPageComments() - 1);
+  nextPageComments = computed(() => this.currentPageComments() + 1);
 
   startComment = computed(() => {
     if(this.commentCount() > 0) {
@@ -69,7 +69,7 @@ export class PostDetail {
       switchMap((post) => {
         if (!post) return of(null);
         this.post = post;
-        return this.getComments()
+        return this.getComments();
       })
     )
     .subscribe({
@@ -80,12 +80,10 @@ export class PostDetail {
     })
   }
 
-  getComments(page: string | null = null) {
+  getComments(page?: number) {
     return this.commentService.getComments(this.post.id, page).pipe(
       tap((response) => {
         this.comments = response.results;
-        this.prevPageComments = response.prevPage;
-        this.nextPageComments = response.nextPage;
         this.currentPageComments.set(response.currentPage);
         this.commentCount.set(response.count);
       }),
@@ -97,14 +95,17 @@ export class PostDetail {
   }
 
   onPrevPageComments() {
-    this.getComments(this.prevPageComments).subscribe()
+    this.getComments(this.prevPageComments()).subscribe()
   }
 
   onNextPageComments() {
-    this.getComments(this.nextPageComments).subscribe()
+    this.getComments(this.nextPageComments()).subscribe()
   }
 
   submitComment() {
+    if (!this.newComment) {
+      return;
+    }
     this.isSubmitting = true;
     this.commentService.commentPost(this.post.id,this.newComment)
     .subscribe({
@@ -113,7 +114,7 @@ export class PostDetail {
         this.comments.push(comment);
         this.commentCount.update(v => v + 1);
       } else {
-        this.getComments().subscribe()
+        this.getComments(this.currentPageComments()).subscribe()
       }
       this.newComment = '';
       this.isSubmitting = false;

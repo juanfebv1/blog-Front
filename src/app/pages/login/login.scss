@@ -1,8 +1,10 @@
 .login-container {
   width: 40%;
-  border: 1px solid black;
+  border: 2px solid black;
+  border-radius: 20px;
   align-items: center;
   margin: 10rem auto;
+  width: 500px;
 
   .login-title {
     display: flex;
@@ -20,9 +22,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%;
-      max-width: 400px;
       margin-bottom: 1rem;
+      width: 80%;
 
       input {
         width: 100%;
@@ -43,6 +44,10 @@
       font-size: large;
       font-weight: 550;
       padding: 0.75rem;
+
+      &:hover {
+        transform: scale(1.0);
+      }
     }
   }
 
@@ -57,13 +62,26 @@
       font-size: 1rem;
     }
     a{
-      color: blue;
+      color: #0077cc;
       font-size: 1.3rem;
       text-decoration: underline;
       cursor: pointer;
     }
   }
   @media(max-width: 768px) {
-    width: 80%;
+    width: 90%;
+    border: 0;
+  }
+}
+
+small {
+  color: red;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  &.visible {
+    opacity: 1;
   }
 }

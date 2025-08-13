@@ -10,10 +10,13 @@ export class CommentService {
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient);
 
-  getComments(postId: number, page: string | null = null) {
-    const url = page ? page : `${this.apiUrl}/comments/`;
-    const params = new HttpParams().set('post', postId);
-    return this.http.get<CommentResponse>(url, {params});
+  getComments(postId: number, page?: number) {
+    let params = new HttpParams();
+    params = params.set('post', postId);
+    if (page) {
+      params = params.set('page', page);
+    }
+    return this.http.get<CommentResponse>(`${this.apiUrl}/comments/`, {params});
   }
 
   commentPost(postId: number, content: string) {

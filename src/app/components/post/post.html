@@ -3,10 +3,10 @@
     <h1>{{ post.title }}</h1>
     <div class="post-info">
       <div class="team">
-        <p> {{ post.team_name }}</p>
+        <h4> {{ post.team_name }}</h4>
       </div>
-      <p> {{ post.username }}</p>
-      <p> {{ post.posted_on |  date:'short'}}</p>
+      <h4> {{ post.username }}</h4>
+      <h4> {{ post.posted_on |  date:'short'}}</h4>
     </div>
   </div>
   <div class="post-content" [innerHTML]="adjustedContent" (click)="onContentClick($event)"></div>
@@ -31,13 +31,9 @@
           <i [routerLink]="`${post.id}`" class="far fa-commenting interact"></i>
         </div>
 
-        <div class="edit-delete-buttons">
-          @if (userCanEdit) {
+        <div [class.invisible]="!userCanEdit" class="edit-delete-buttons">
             <i [routerLink]="`/posts/edit/${post.id}`" class="fa fa-pen-to-square interact"></i>
             <i (click)="onDelete()" class="fa fa-trash interact"></i>
-          } @else {
-            <span class="empty-space"></span>
-          }
         </div>
       </div>
     }
@@ -55,7 +51,11 @@
   <div class="likes-list-overlay">
     <p>List of likes</p>
     <div class="counter">
-      <i [style.visibility]="prevLikesPage ? 'visible' : 'hidden'" (click)="getPrevLikesPage()" class="fa-solid fa-angle-left"></i>
+      <i
+        class="fa-solid fa-angle-left"
+        [style.visibility]="prevLikesPage ? 'visible' : 'hidden'"
+        (click)="getPrevLikesPage()"
+      ></i>
       <p> {{startLikes()}} - {{endLikes()}} of {{countLikes()}}</p>
       <i [style.visibility]="nextLikesPage ? 'visible' : 'hidden'" (click)="getNextLikesPage()" class="fa-solid fa-angle-right"></i>
     </div>

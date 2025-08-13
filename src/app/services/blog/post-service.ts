@@ -5,7 +5,7 @@ import { LikeResponse, PostCreateInterface, PostInterface, PostInterfaceResponse
 
 @Injectable({
   providedIn: 'root'
-})
+}) 
 export class PostService {
   private apiUrl = environment.apiUrl;
   private http = inject(HttpClient);
