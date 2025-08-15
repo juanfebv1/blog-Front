@@ -6,7 +6,7 @@ import { PostService } from '../../services/blog/post-service';
 import { PostCreateInterface } from '../../models/post.model';
 import { Notification } from '../../services/notification';
 
-@Component({ 
+@Component({
   selector: 'app-post-creation',
   imports: [PostForm],
   templateUrl: './post-creation.html',
@@ -31,7 +31,10 @@ export class PostCreation {
   constructor() {
     effect(() => {
       const isAuth = this.authService.isLoggedInSig();
-      if (!isAuth) this.router.navigateByUrl('login');
+      if (!isAuth) {
+        this.notificationService.displayNotification('You must be logged in to create a post', 3000);
+        this.router.navigateByUrl('login');
+      }
     })
   }
 

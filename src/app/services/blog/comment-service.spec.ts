@@ -62,7 +62,7 @@ describe('CommentService', () => {
   });
 
   it('getComments() when page indicated', () => {
-    const pageUrl = 'http://localhost/comments/?page=2';
+    const page = 2;
     const mockResponse: CommentResponse = {
       prevPage: 'firstPage',
       nextPage: null,
@@ -72,12 +72,13 @@ describe('CommentService', () => {
       results: []
     };
     const postId = 1;
-    service.getComments(postId, pageUrl).subscribe((res) => {
+    service.getComments(postId, page).subscribe((res) => {
       expect(res).toEqual(mockResponse);
     });
     const req = httpController.expectOne(req =>
-      req.url === pageUrl &&
-      req.params.get('post') === String(postId)
+      req.url.includes(apiUrl)  &&
+      req.params.get('post') === String(postId) &&
+      req.params.get('page') === String(page)
     );
     expect(req.request.method).toBe('GET');
     expect(req.request.body).toBeFalsy();

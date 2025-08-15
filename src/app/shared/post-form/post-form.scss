@@ -85,9 +85,10 @@ $post-gray: #585858;
             flex: 1 1 50%;
             text-align: center;
           }
-        }
-        select {
-          width: 90%;
+          td {
+            font-weight: bold;
+            color: var(--second-color);
+          }
         }
       }
     }
@@ -140,7 +141,7 @@ $post-gray: #585858;
 }
 
 select {
-  width: 100%;
+  width: 90%;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   font-family: inherit;
@@ -149,12 +150,17 @@ select {
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   cursor: pointer;
+  text-align: center;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: $post-secondary; // uses your theme
     box-shadow: 0 0 0 3px rgba(72, 163, 176, 0.2);
+  }
+
+  @media(max-width: 768px) {
+    width: 70%;
   }
 
   option {
@@ -176,6 +182,10 @@ select {
     .form-permissions table tr {
       flex-direction: column;
       gap: 0.5rem;
+
+      th, td {
+        width: 100%;
+      }
     }
   }
 }

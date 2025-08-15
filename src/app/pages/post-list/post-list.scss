@@ -1,3 +1,7 @@
+$post-secondary: rgb(72, 163, 176);
+$post-secondary-dark: rgb(62, 143, 156);
+$post-gray: #585858;
+
 .post-list {
   margin-top: 1rem;
 }
@@ -19,10 +23,17 @@
 
   .interact {
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    color: $post-secondary;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
     &:hover {
       transform: scale(1.0);
+      color: $post-secondary-dark;
     }
+  }
+
+  .not-show {
+    opacity: 0.3;
+    pointer-events: none;
   }
 
   .counter {
@@ -40,7 +51,7 @@
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  font-size: 4rem;
+  font-size: 4.5rem;
   color: var(--second-color);
   background-color: var(--main-color);
   cursor: pointer;
@@ -66,5 +77,10 @@
 }
 
 footer {
-  height: 6.5rem;
+  height: 2rem;
+  @media (min-width: 768px) {
+    height: 6.5rem;
+  }
 }
+
+

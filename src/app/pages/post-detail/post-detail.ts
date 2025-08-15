@@ -8,6 +8,7 @@ import { Auth } from '../../services/auth';
 import { CommentService } from '../../services/blog/comment-service';
 import { FormsModule } from '@angular/forms';
 import { Notification } from '../../services/notification';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const COMMENT_PAGE_SIZE = 5;
 
@@ -43,8 +44,11 @@ export class PostDetail {
   endComment = computed(() => Math.min(this.commentCount(), this.currentPageComments() * 5));
 
   userCanComment = false;
-  newComment: string = '';
-  isSubmitting = false;
+  newComment = signal('');
+  isSubmitting = signal(false);
+  canSubmit = computed(() => {
+    return !!this.newComment().trim() && !this.isSubmitting();
+  })
 
   constructor() {
     effect(() => {
@@ -62,8 +66,12 @@ export class PostDetail {
         }
         return of(null);
       }),
-      catchError(() => {
-        this.router.navigateByUrl('not-found');
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 0) {
+          this.notification.displayNotification('Server error, try again in a moment', 3000);
+        } else{
+          this.router.navigateByUrl('not-found');
+        }
         return of(null);
       }),
       switchMap((post) => {
@@ -73,7 +81,14 @@ export class PostDetail {
       })
     )
     .subscribe({
-      next: () => this.status = 'ready',
+      next: (res) => {
+        if (!res) {
+         this.status = 'init';
+        } else {
+          this.status = 'ready';
+        }
+
+      },
       error: (error) => {
         console.error(error);
       }
@@ -103,11 +118,8 @@ export class PostDetail {
   }
 
   submitComment() {
-    if (!this.newComment) {
-      return;
-    }
-    this.isSubmitting = true;
-    this.commentService.commentPost(this.post.id,this.newComment)
+    this.isSubmitting.set(true);
+    this.commentService.commentPost(this.post.id,this.newComment())
     .subscribe({
       next: (comment) => {
       if (this.comments && this.comments.length < COMMENT_PAGE_SIZE) {
@@ -116,12 +128,14 @@ export class PostDetail {
       } else {
         this.getComments(this.currentPageComments()).subscribe()
       }
-      this.newComment = '';
-      this.isSubmitting = false;
+      this.newComment.set('');
     },
     error: (error) => {
       this.notification.displaySomethingWentWrong();
       console.error(error);
+    },
+    complete: () => {
+      this.isSubmitting.set(false);
     }
     })
   }

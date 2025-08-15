@@ -27,6 +27,11 @@ export class Register {
   passwordError = '';
   confirmPasswordError = '';
 
+  displayPassword = false;
+  displayToggleIcon = false;
+  displayConfirmPassword = false;
+  displayToogleConfirmIcon = false;
+
   isSubmitting = false;
 
   constructor() {
@@ -61,12 +66,26 @@ export class Register {
       this.usernameError = '';
     });
 
-    this.registerForm.get('password')?.valueChanges.subscribe(() => {
+    const passwordCtrl = this.registerForm.controls.password;
+
+    passwordCtrl.valueChanges.subscribe(() => {
+      if(passwordCtrl.value !== ''){
+        this.displayToggleIcon = true;
+      } else {
+        this.displayToggleIcon = false;
+      }
       this.passwordError = '';
       this.confirmPasswordError = '';
     });
 
-    this.registerForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+    const confirmPasswordCtrl = this.registerForm.controls.confirmPassword;
+
+    confirmPasswordCtrl.valueChanges.subscribe(() => {
+      if(confirmPasswordCtrl.value !== ''){
+        this.displayToogleConfirmIcon = true;
+      } else {
+        this.displayToogleConfirmIcon = false;
+      }
       this.confirmPasswordError = '';
     });
   }

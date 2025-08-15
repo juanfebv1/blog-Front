@@ -13,7 +13,7 @@ $post-gray: #585858;
     margin-top: 0.25rem;
 
     h1 {
-      flex: 1 1 55%;
+      max-width: 55%;
       text-wrap: inherit;
       overflow-wrap: anywhere;
       line-height: 1.4;
@@ -21,8 +21,8 @@ $post-gray: #585858;
     }
 
     .post-info {
-      flex: 1 1 40%;
-      display: flex;
+      flex: 1 1;
+      display: flex; 
       gap: 1.45rem;
       justify-content: flex-end;
       align-items: center;
@@ -60,14 +60,18 @@ $post-gray: #585858;
 }
 
 .post-content {
-  font-size: 105%;
+  font-size: 1.2rem;
   padding-bottom: 0.75rem;
   margin-bottom: 0.75rem;
   overflow-wrap: anywhere;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
 }
 
 ::ng-deep .show-more {
-  color: darken($post-secondary, 10%);
+  color: $post-secondary;
   font-size: 110%;
   background-color: transparent;
   border: 0;
@@ -157,6 +161,11 @@ $post-gray: #585858;
     justify-content: center;
     align-items: center;
     gap: 0.25rem;
+
+    .not-show {
+      opacity: 0.3;
+      pointer-events: none;
+    }
   }
 
   .like {
@@ -167,27 +176,78 @@ $post-gray: #585858;
 }
 
 .delete-dialog {
-  border: solid 2px black;
-  background-color: white;
-  padding: 1rem;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    color: #b91c1c;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
 
   .buttons {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
 
     button {
-      width: 5rem;
-      height: 2.5rem;
-      font-size: 100%;
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        transform: scale(1.03);
+      }
     }
 
     .delete {
-      background-color: rgb(182, 3, 3);
-      color: white;
+      background-color: #dc2626;
+      color: #fff;
+
+      &:hover {
+        background-color: #b91c1c;
+      }
+    }
+
+    button:not(.delete) {
+      background-color: #f3f4f6;
+      color: #374151;
+
+      &:hover {
+        background-color: #e5e7eb;
+      }
+    }
+  }
+
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    .buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
     }
   }
 }
+
 
 .interact {
   cursor: pointer;
@@ -207,3 +267,14 @@ $post-gray: #585858;
     font-size: 2rem;
   }
 }
+
+@media (max-width: 400px) {
+  .post-panel{
+    display: block;
+    .likes-comments-counter {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+

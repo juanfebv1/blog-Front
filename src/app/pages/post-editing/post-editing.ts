@@ -78,6 +78,8 @@ export class PostEditing {
 
     if (!this.authService.isLoggedInSig() || !user) return false;
 
+    if(user.role === 'admin') return true;
+
     if (post.email === user.email) return true;
 
     if (post.authenticated_permission > 1) return true;

@@ -6,6 +6,9 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+$post-secondary: rgb(72, 163, 176);
+$post-secondary-dark: rgb(62, 143, 156);
+$post-gray: #585858;
 
 :root {
   --main-color: #faf9fd;
@@ -37,12 +40,11 @@ html {
   font: var(--mat-sys-body-medium);
 }/* You can add global styles to this file, and also import other style files */
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
-
 
 .container {
   height: auto;
@@ -50,8 +52,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-top: 80px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  max-width: 1300px;
 
   @media (max-width: 768px) {
     padding-left: 2rem;
@@ -59,15 +62,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 
   // Responsive max-widths (default Tailwind breakpoints)
-  // @media (min-width: 328px) {
-  //   max-width: 328px;
-  // }
+
   @media (min-width: 640px) {
     max-width: 640px; // sm
   }
 
   @media (min-width: 768px) {
     max-width: 768px; // md
+  }
+
+  @media (min-width: 840px) {
+    max-width: 840px;
   }
 
   @media (min-width: 1024px) {
@@ -86,3 +91,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .ck-powered-by {
   display: none !important;
 }
+
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: black !important;
+}
+
+

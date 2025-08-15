@@ -11,9 +11,10 @@ export interface LoginUserDTO {
 
 export interface UserProfile {
   id: number,
-  email: string,
   username: string,
+  email: string,
   team: number,
-  team_name: string
+  team_name: string,
+  role: string
 }
 

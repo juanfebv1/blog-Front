@@ -54,7 +54,8 @@ describe('Auth', () => {
       email: "mock@email.com",
       username: "mockUser",
       team: 1,
-      team_name: 'default'
+      team_name: 'default',
+      role: 'blogger'
     }
     service.register(mockForm)
     .subscribe( (response) => {
@@ -84,7 +85,8 @@ describe('Auth', () => {
         email: "mock@email.com",
         username: "mock",
         team: 1,
-        team_name: "default team"
+        team_name: "default team",
+        role: 'blogger'
       }
     };
 
@@ -121,7 +123,8 @@ describe('Auth', () => {
       email: 'test@email.com',
       username: 'testuser',
       team: 1,
-      team_name: 'default'
+      team_name: 'default',
+      role: 'blogger'
     };
     const setItemSpy = spyOn(localStorage, 'setItem');
     service.saveUser(user);
@@ -134,7 +137,8 @@ describe('Auth', () => {
       email: 'test@email.com',
       username: 'testuser',
       team: 1,
-      team_name: 'default'
+      team_name: 'default',
+      role: 'blogger'
     };
     const userJSON = JSON.stringify(user);
     tokenSpy.isValidtoken.and.returnValue(true);
@@ -156,7 +160,8 @@ describe('Auth', () => {
       email: 'test@email.com',
       username: 'testuser',
       team: 1,
-      team_name: 'default'
+      team_name: 'default',
+      role: 'blogger'
     };
     const userJSON = JSON.stringify(user);
     spyOn(localStorage,'getItem').withArgs('user').and.returnValue(userJSON);

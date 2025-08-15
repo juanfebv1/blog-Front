@@ -51,7 +51,7 @@ export class PostForm {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      title: [this.initialValues.title, [Validators.required]],
+      title: [this.initialValues.title, [Validators.required, Validators.pattern(/^(?!\s*$).+/)]],
       content: [this.initialValues.content, [Validators.required]],
       publicPermission: [this.initialValues.publicPermission, [Validators.required]],
       authenticatedPermission: [this.initialValues.authenticatedPermission, [Validators.required]],
@@ -116,14 +116,12 @@ export class PostForm {
     const origin = window.location.origin;
 
     if (previousUrl.includes(origin)) {
-      console.log('Going back in app because origin: ', origin);
       this.location.back();
     } else {
-      console.log('Going home because origin: ', origin);
       this.router.navigateByUrl('');
     }
   }
- 
+
   handleValidationErrors() {
     const titleCtrl = this.form.controls['title'];
     const contentCtrl = this.form.controls['content'];

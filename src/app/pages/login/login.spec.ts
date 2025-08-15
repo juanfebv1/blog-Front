@@ -126,7 +126,8 @@ describe('Login', () => {
               email: formValues.email,
               username: 'mockUser',
               team: 1,
-              team_name: 'some_team'
+              team_name: 'some_team',
+              role: 'blogger'
           }
       };
       authSpy.login.and.returnValue(of(mockResponse));

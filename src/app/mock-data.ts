@@ -6,7 +6,8 @@ export const mockUser: UserProfile = {
     email: "user@email.com",
     username: "mockUser",
     team: 1,
-    team_name: "default"
+    team_name: "default",
+    role: 'blogger',
 };
 
 export const postsList: PostInterfaceResponse[] = [
@@ -349,7 +350,7 @@ export const mockBasePostResponse: PostInterfaceResponse =
   id: 1,
   title: 'string',
   content: "string",
-  username: "string", 
+  username: "string",
   email: "other@email.com",
   team: 1,
   team_name: "string",

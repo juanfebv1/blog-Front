@@ -56,8 +56,6 @@ export class Post {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private elRef: ElementRef,
-    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -72,6 +70,9 @@ export class Post {
     const user = this.authService.currentUserSig();
     if (!this.authService.isLoggedInSig() || !user) {
       return false;
+    }
+    if (user.role === 'admin') {
+      return true;
     }
     if (this.post.email === user.email) {
       return true;
@@ -94,7 +95,6 @@ export class Post {
       const newContent = truncate(this.post.content, 200);
       const showMoreTag = '<button class="show-more">Show More</button>';
       const idx = newContent.lastIndexOf('<');
-
       if (idx === -1){
         return this.sanitizer.bypassSecurityTrustHtml(newContent + showMoreTag);
       } else {

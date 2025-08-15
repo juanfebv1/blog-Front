@@ -6,7 +6,7 @@
         formControlName="title"
         id="title"
         type="text"
-        placeholder="Type your post title"
+        placeholder="Enter a title for your post"
       >
     <small [class.visible]="titleError">{{ titleError }}</small>
     </div>
@@ -16,7 +16,7 @@
         [editor]="Editor"
         formControlName="content"
         [config]="{
-          placeholder: 'Type your blog post...',
+          placeholder: 'Write your post content here...',
           toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
           }"
         ></ckeditor>

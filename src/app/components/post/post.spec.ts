@@ -138,8 +138,8 @@ describe('Post user logged in', () => {
       fixture.detectChanges();
       expect(component.userCanEdit).toBeFalse();
 
-      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
-      expect(editElement).toBeFalsy();
+      const editElement = fixture.nativeElement.querySelector('.invisible');
+      expect(editElement).toBeTruthy();
 
       mockUserSig.set(mockUser);
     });
@@ -151,8 +151,8 @@ describe('Post user logged in', () => {
       fixture.detectChanges();
       expect(component.userCanEdit).toBeFalse();
 
-      const editElement = fixture.nativeElement.querySelector('.fa-pen-to-square');
-      expect(editElement).toBeFalsy();
+      const editElement = fixture.nativeElement.querySelector('.invisible');
+      expect(editElement).toBeTruthy();
     });
   })
 

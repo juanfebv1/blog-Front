@@ -4,19 +4,41 @@
   </div>
   <form [formGroup]="registerForm" (ngSubmit)="register()">
     <div class="form-group">
-      <input formControlName="email" id="email" type="email" placeholder="Enter email">
+      <div class="input-container">
+        <input  formControlName="email" id="email" type="email" placeholder="Enter email">
+      </div>
       <small [class.visible]="emailError" class="error"> {{ emailError }}</small>
     </div>
     <div class="form-group">
-      <input formControlName="username" id="username" type="text" placeholder="Enter username">
+      <div class="input-container">
+        <input formControlName="username" id="username" type="text" placeholder="Enter username">
+      </div>
       <small [class.visible]="usernameError" class="error"> {{ usernameError }}</small>
     </div>
     <div class="form-group">
-      <input formControlName="password" id="password" type="password" placeholder="Password">
+      <div class="input-container password-container">
+        <input [type]="displayPassword ? 'text' : 'password'" formControlName="password" id="password" type="password" placeholder="Password">
+        <div  (click)="displayPassword = !displayPassword" class="show-password" [class.visible]="displayToggleIcon">
+          @if (displayPassword) {
+            <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+            <i class="fa-solid fa-eye"></i>
+          }
+        </div>
+      </div>
       <small [class.visible]="passwordError" class="error"> {{passwordError}} </small>
     </div>
     <div class="form-group">
-      <input formControlName="confirmPassword" id="confirmPassword" type="password" placeholder="Confirm password">
+      <div class="input-container password-container">
+        <input [type]="displayConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" id="confirmPassword" type="password" placeholder="Confirm password">
+        <div  (click)="displayConfirmPassword = !displayConfirmPassword" class="show-password" [class.visible]="displayToogleConfirmIcon">
+          @if (displayConfirmPassword) {
+            <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+            <i class="fa-solid fa-eye"></i>
+          }
+        </div>
+      </div>
       <small [class.visible]="confirmPasswordError" class="error"> {{confirmPasswordError}} </small>
     </div>
     <button type="submit" [disabled]="isSubmitting"> Register</button>

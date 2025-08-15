@@ -39,7 +39,7 @@
     }
   </div>
 
-</div>
+</div> 
 
 <ng-template
   cdkConnectedOverlay
@@ -49,15 +49,19 @@
   (overlayOutsideClick)="showLikes = false"
 >
   <div class="likes-list-overlay">
-    <p>List of likes</p>
+    <h3>List of likes</h3>
     <div class="counter">
       <i
-        class="fa-solid fa-angle-left"
-        [style.visibility]="prevLikesPage ? 'visible' : 'hidden'"
+        class="fa-solid fa-angle-left interact"
+        [class.not-show]="!prevLikesPage"
         (click)="getPrevLikesPage()"
       ></i>
       <p> {{startLikes()}} - {{endLikes()}} of {{countLikes()}}</p>
-      <i [style.visibility]="nextLikesPage ? 'visible' : 'hidden'" (click)="getNextLikesPage()" class="fa-solid fa-angle-right"></i>
+      <i
+        class="fa-solid fa-angle-right interact"
+        [class.not-show]="!nextLikesPage"
+        (click)="getNextLikesPage()"
+      ></i>
     </div>
     @for (like of likes; track $index) {
       <p class="like"> {{like.username}}</p>

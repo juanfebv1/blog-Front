@@ -4,16 +4,25 @@
   </div>
   <form [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="form-input">
-      <input type="email" id="email" placeholder="Enter email" formControlName="email">
+      <div class="input-container">
+        <input type="email" id="email" placeholder="Enter email" formControlName="email">
+      </div>
       <small [class.visible]="emailError">{{ emailError}}</small>
     </div>
     <div class="form-input">
-      <input type="password" id="password" placeholder="Enter password" formControlName="password">
+      <div class="input-container password-container">
+        <input [type]="displayPassword ? 'text' : 'password'" id="password" placeholder="Enter password" formControlName="password">
+        <div  (click)="displayPassword = !displayPassword" class="show-password" [class.visible]="displayToggleIcon">
+          @if (displayPassword) {
+            <i class="fa-solid fa-eye-slash"></i>
+          } @else {
+            <i class="fa-solid fa-eye"></i>
+          }
+        </div>
+      </div>
       <small [class.visible]="passwordError"> {{passwordError}}</small>
+      <small [class.visible]="invalidCredentialsError">{{ invalidCredentialsError }}</small>
     </div>
-    @if (invalidCredentialsError) {
-      <small>{{ invalidCredentialsError }}</small>
-    }
 
     <div>
       <button type="submit" [disabled]="isSubmitting">Log in</button>

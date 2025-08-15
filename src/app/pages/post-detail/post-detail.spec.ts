@@ -77,8 +77,7 @@ describe('PostDetail', () => {
     });
     expect(component.commentCount()).toBe(mockBasePost.count_comments);
     expect(component.currentPageComments()).toBe(mockCommentShortList.currentPage);
-    expect(component.prevPageComments).toBe(mockCommentShortList.prevPage);
-    expect(component.nextPageComments).toBe(mockCommentShortList.nextPage);
+
     expect(component.startComment()).toBe(1);
     expect(component.endComment()).toBe(mockCommentShortList.count);
   });
@@ -99,15 +98,13 @@ describe('PostDetail', () => {
     });
     expect(component.commentCount()).toBe(mockCommentLongList.count);
     expect(component.currentPageComments()).toBe(mockCommentLongList.currentPage);
-    expect(component.prevPageComments).toBe(mockCommentLongList.prevPage);
-    expect(component.nextPageComments).toBe(mockCommentLongList.nextPage);
     expect(component.startComment()).toBe(1);
     expect(component.endComment()).toBe(COMMENT_PAGE_SIZE);
   });
 
   it('should allow user to comment', () => {
     expect(component.userCanComment).toBeTrue();
-    expect(component.newComment).toBe('');
+    expect(component.newComment()).toBe('');
     const addCommentElement = fixture.nativeElement.querySelector('.add-comment-container');
     expect(addCommentElement).toBeTruthy();
   });
@@ -130,18 +127,18 @@ describe('PostDetail', () => {
 
   describe('submitComment()', () => {
     it('should call comment service with correct post ID and payload', () => {
-      component.newComment = 'Some new comment for test';
+      component.newComment.set('Some new comment for test');
       fixture.detectChanges();
 
       component.submitComment();
       expect(commentSpy.commentPost).toHaveBeenCalledOnceWith(component.post.id, 'Some new comment for test');
-      expect(component.newComment).toBe('');
-      expect(component.isSubmitting).toBeFalse();
+      expect(component.newComment()).toBe('');
+      expect(component.isSubmitting()).toBeFalse();
     });
 
     it('should update comments list', fakeAsync(() => {
       const newTestComment = 'Some new comment for test';
-      component.newComment = newTestComment;
+      component.newComment.set(newTestComment);
 
       component.submitComment();
       fixture.detectChanges();

@@ -1,10 +1,13 @@
-<nav class="browser-nav">
+<nav>
   <div routerLink="" class="logo">
       <img src="Logo_Horizontal_Color.webp" >
   </div>
-  <div [style.visibility]="user ? 'visible' : 'hidden'" class="welcome">
-    <h2>Welcome, {{user && user.username.length < 15 ? user.username : user?.username?.slice(0,14) + '...'}}</h2>
-  </div>
+  @if(user) {
+    <div class="welcome">
+      <p class="shortUsername">Hi, {{shortUsername}}</p>
+      <p class="longUsername">Hey there, {{longUsername}}</p>
+    </div>
+  }
   <div class="log-buttons">
     @if(!user) {
       <div class="login-register">
@@ -13,8 +16,9 @@
       </div>
     }
     @else{
-      <button  (click)="onLogout()"> Log out</button>
+      <button class="logout"  (click)="onLogout()"> Log out</button>
     }
   </div>
 </nav>
+
 

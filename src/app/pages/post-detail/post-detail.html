@@ -4,7 +4,7 @@
       Loading content...
     </div>
   }
-  @else {
+  @else if (status === 'ready') {
     <div class="post-header">
       <h1>{{ post.title }}</h1>
       <div class="post-info">
@@ -24,14 +24,14 @@
       <div class="nav-comments">
         <i
         class="fa-solid fa-angle-left fa-2x interact"
-        [style.visibility]="prevPageComments()? 'visible' : 'hidden'"
+        [class.not-show]="!prevPageComments()"
         (click)="onPrevPageComments()"
         >
         </i>
         <p>{{startComment()}} - {{endComment()}} of {{commentCount()}}</p>
         <i
           class="fa-solid fa-angle-right fa-2x interact"
-          [style.visibility]="endComment() < commentCount()? 'visible' : 'hidden'"
+          [class.not-show]="endComment() === commentCount()"
           (click)="onNextPageComments()"
         >
 
@@ -55,8 +55,8 @@
         <h2>Add New Comment</h2>
         <textarea [(ngModel)]="newComment" rows="3" placeholder="Write your comment..."></textarea>
         <div class="add-comment-buttons">
-          <button class="submit-but" (click)="submitComment()" [disabled]="isSubmitting">Submit</button>
-          <button (click)="newComment=''">Cancel</button>
+          <button class="submit-but" (click)="submitComment()" [class.disabled]="!canSubmit()">Submit</button>
+          <button (click)="newComment.set('')">Cancel</button>
         </div>
       </div>
     }

@@ -6,6 +6,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   width: 100vw;
+  height: 56px;
   gap: 0.5rem;
   padding: 0.5rem 1.75rem;
   background-color: var(--second-color);
@@ -18,13 +19,22 @@ nav {
       transform: scale(1.0);
     }
     img {
-      max-height: 2.2rem;
+      height: 1.5rem;
     }
   }
   .welcome {
     font-size: 0.85rem;
-    font-weight: 500;
     color: #1E1E1E;
+    p {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .shortUsername {
+      display: block;
+    }
+    .longUsername {
+      display: none;
+    }
   }
 
   .log-buttons {
@@ -53,25 +63,31 @@ nav {
       }
 
       &.logout {
-        background-color: rgb(200, 60, 60);
-        color: white;
-        font-size: 0.8rem;
-        width: 5rem;
-
         &:hover {
-          background-color: rgb(150, 0, 0);
+          background-color: rgb(200, 60, 60);
         }
       }
     }
   }
 
   @media (min-width: 768px) {
+    nav{
+      height: 64px;
+    }
     .logo img {
-      max-height: 3rem;
+      height: 2.2rem;
     }
 
     .welcome {
-      font-size: 1rem;
+      p{
+        font-size: 1.5rem;
+      }
+      .shortUsername {
+        display: none;
+      }
+      .longUsername {
+        display: block;
+      }
     }
 
     .log-buttons
@@ -80,10 +96,86 @@ nav {
         margin-right: 2rem;
       }
 
+      .logout {
+        margin-right: 2rem;
+      }
       button {
         font-size: 0.95rem;
         padding: 0.5rem 1rem;
         width: 6rem;
       }
+  }
+}
+
+.logout-dialog {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    color: #b91c1c;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+
+    .confirm-logout {
+      background-color: #dc2626;
+      color: #fff;
+
+      &:hover {
+        background-color: #b91c1c;
+      }
+    }
+
+    button:not(.confirm-logout) {
+      background-color: #f3f4f6;
+      color: #374151;
+
+      &:hover {
+        background-color: #e5e7eb;
+      }
+    }
+  }
+
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    .buttons {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
   }
 }

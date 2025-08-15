@@ -159,7 +159,8 @@ describe('Register', () => {
         email: "correctemail@email.com",
         username: "test",
         team: 1,
-        team_name: "default"
+        team_name: "default",
+        role: 'blogger'
       }
       authSpy.register.and.returnValue(of(mockResponse));
       const notificationSpy = spyOn(TestBed.inject(Notification), 'displayNotification')

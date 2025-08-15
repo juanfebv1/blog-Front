@@ -20,7 +20,7 @@ describe('Nav', () => {
        }
       );
 
-    await TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({ 
       imports: [Nav, RouterModule.forRoot([])],
       providers: [
         {provide: Auth, useValue: authSpy}

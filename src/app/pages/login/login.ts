@@ -23,6 +23,8 @@ export class Login {
   emailError = '';
   passwordError = '';
   isSubmitting = false;
+  displayPassword = false;
+  displayToggleIcon = false;
 
   constructor() {
     this.resetTouchedAfterSubmit();
@@ -42,7 +44,14 @@ export class Login {
       this.invalidCredentialsError = '';
     });
 
-    this.loginForm.get('password')?.valueChanges.subscribe(() => {
+    const passwordCtrl = this.loginForm.controls.password;
+
+    passwordCtrl.valueChanges.subscribe(() => {
+      if (passwordCtrl.value != ''){
+        this.displayToggleIcon = true;
+      } else {
+        this.displayToggleIcon = false;
+      }
       this.passwordError = '';
       this.invalidCredentialsError = '';
     });

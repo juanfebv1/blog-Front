@@ -42,11 +42,19 @@ export class Auth {
   }
 
   logout() {
+    this.logoutBackEnd();
     this.currentUserSig.set(null);
     this.isLoggedInSig.set(false);
     this.tokenService.removeToken();
     this.tokenService.removeRefreshToken();
     this.removeUser();
+  }
+
+  logoutBackEnd() {
+    const refresh = this.tokenService.getRefreshToken();
+    this.http.post(this.apiUrl + '/logout/', {refresh: refresh}).subscribe({
+      error: (error) => {console.error(error['detail'])}
+    })
   }
 
   saveUser(user: UserProfile) {
